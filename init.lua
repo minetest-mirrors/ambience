@@ -1,5 +1,5 @@
 
---= Ambience lite by TenPlus1 (24th December 2016)
+--= Ambience lite by TenPlus1 (6th July 2017)
 
 local max_frequency_all = 1000 -- larger number means more frequent sounds (100-2000)
 local SOUNDVOLUME = 1.0
@@ -10,6 +10,12 @@ minetest.override_item("default:water_source", { sounds = {} })
 minetest.override_item("default:water_flowing", { sounds = {} })
 minetest.override_item("default:river_water_source", { sounds = {} })
 minetest.override_item("default:river_water_flowing", { sounds = {} })
+
+-- music settings
+local music_frequency = 100
+local music_handler = nil
+local MUSICVOLUME = 1
+local play_music = minetest.setting_getbool("ambience_music") ~= false
 
 -- sound sets (gain defaults to 0.3 unless specifically set)
 
@@ -133,6 +139,27 @@ local get_ambience = function(player)
 
 	pos.y = pos.y - 0.2 -- reset pos
 
+	local tod = minetest.get_timeofday()
+
+	-- play server or local music if available
+	if play_music then
+
+--		print ("-- tod", tod, music_handler)
+
+		if tod > 0.01 and tod < 0.02 then
+			music_handler = nil
+		end
+
+		-- play at midnight
+		if tod >= 0.0 and tod <= 0.01 and not music_handler then
+
+			music_handler = minetest.sound_play("ambience_song", {
+				to_player = player:get_player_name(),
+				gain = MUSICVOLUME
+			})
+		end
+	end
+
 --= START Ambiance
 
 	if minetest.registered_nodes[nod_head]
@@ -222,8 +249,6 @@ print (
 		return {cave = cave}
 	end
 
-	local tod = minetest.get_timeofday()
-
 	if tod > 0.2
 	and tod < 0.8 then
 
@@ -289,6 +314,7 @@ end
 
 -- check sounds that are not in still_playing
 local still_playing = function(still_playing, player_name)
+
 	if not still_playing.cave then stop_sound(cave, player_name) end
 	if not still_playing.high_up then stop_sound(high_up, player_name) end
 	if not still_playing.beach then stop_sound(beach, player_name) end
@@ -341,7 +367,7 @@ minetest.register_globalstep(function(dtime)
 	end
 end)
 
--- set volume command
+-- set volume commands
 minetest.register_chatcommand("svol", {
 	params = "<svol>",
 	description = "set sound volume (0.1 to 1.0)",
@@ -355,5 +381,21 @@ minetest.register_chatcommand("svol", {
 		if SOUNDVOLUME > 1.0 then SOUNDVOLUME = 1.0 end
 
 		return true, "Sound volume set to " .. SOUNDVOLUME
+	end,
+})
+
+minetest.register_chatcommand("mvol", {
+	params = "<mvol>",
+	description = "set music volume (0.1 to 1.0)",
+	privs = {server = true},
+
+	func = function(name, param)
+
+		MUSICVOLUME = tonumber(param) or MUSICVOLUME
+
+		if MUSICVOLUME < 0.1 then MUSICVOLUME = 0.1 end
+		if MUSICVOLUME > 1.0 then MUSICVOLUME = 1.0 end
+
+		return true, "Music volume set to " .. MUSICVOLUME
 	end,
 })
