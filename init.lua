@@ -1,5 +1,5 @@
 
---= Ambience lite by TenPlus1 (6th July 2017)
+--= Ambience lite by TenPlus1 (23rd August 2017)
 
 local max_frequency_all = 1000 -- larger number means more frequent sounds (100-2000)
 local SOUNDVOLUME = 1.0
@@ -12,7 +12,6 @@ minetest.override_item("default:river_water_source", { sounds = {} })
 minetest.override_item("default:river_water_flowing", { sounds = {} })
 
 -- music settings
-local music_frequency = 100
 local music_handler = nil
 local MUSICVOLUME = 1
 local play_music = minetest.setting_getbool("ambience_music") ~= false
@@ -119,9 +118,14 @@ local jungle_night = {
 	{name = "frog", length = 1},
 }
 
+local ice = {
+	handler = {}, frequency = 250,
+	{name = "icecrack", length = 23},
+}
+
 local radius = 6
 local num_fire, num_lava, num_water_flowing, num_water_source, num_air,
-	num_desert, num_snow, num_jungletree, num_river, num_obsidian
+	num_desert, num_snow, num_jungletree, num_river, num_ice
 
 -- check where player is and which sounds are played
 local get_ambience = function(player)
@@ -162,11 +166,13 @@ local get_ambience = function(player)
 
 --= START Ambiance
 
+	-- head underwater
 	if minetest.registered_nodes[nod_head]
 	and minetest.registered_nodes[nod_head].groups.water then
 		return {underwater = underwater}
 	end
 
+	-- wading through water
 	if minetest.registered_nodes[nod_feet].groups.water then
 
 		local control = player:get_player_control()
@@ -182,7 +188,7 @@ local get_ambience = function(player)
 		{
 			"fire:basic_flame", "fire:permanent_flame",
 			"default:lava_flowing", "default:lava_source", "default:jungletree",
-			"default:water_flowing", "default:water_source",
+			"default:water_flowing", "default:water_source", "default:ice",
 			"default:river_water_flowing", "default:river_water_source",
 			"default:desert_sand", "default:desert_stone", "default:snowblock"
 		})
@@ -195,7 +201,7 @@ local get_ambience = function(player)
 	num_snow = (cn["default:snowblock"] or 0)
 	num_jungletree = (cn["default:jungletree"] or 0)
 	num_river = (cn["default:river_water_source"] or 0) + (cn["default:river_water_flowing"] or 0)
-
+	num_ice = (cn["default:ice"] or 0)
 --[[
 print (
 	"fr:" .. num_fire,
@@ -204,10 +210,10 @@ print (
 	"ws:" .. num_water_source,
 	"ds:" .. num_desert,
 	"sn:" .. num_snow,
+	"ic:" .. num_ice,
 	"jt:" .. num_jungletree
 )
 ]]
-
 	-- is fire redo mod active?
 	if fire and fire.mod and fire.mod == "redo" then
 
@@ -219,55 +225,70 @@ print (
 		end
 	end
 
+	-- lava
 	if num_lava > 5 then
 		return {lava = lava}
 	end
 
+	-- flowing water
 	if num_water_flowing > 30 then
 		return {flowing_water = flowing_water}
 	end
 
+	-- flowing river
 	if num_river > 30 then
 		return {river = river}
 	end
 
+	-- sea level beach
 	if pos.y < 7 and pos.y > 0
 	and num_water_source > 100 then
 		return {beach = beach}
 	end
 
+	-- ice flows
+	if num_ice > 100 and num_snow > 100 then
+		return {ice = ice}
+	end
+
+	-- desert
 	if num_desert > 150 then
 		return {desert = desert}
 	end
 
+	-- high up or surrounded by snow
 	if pos.y > 60
 	or num_snow > 150 then
 		return {high_up = high_up}
 	end
 
-	if pos.y < -10 then
+	-- underground
+	if pos.y < -15 then
 		return {cave = cave}
 	end
 
 	if tod > 0.2
 	and tod < 0.8 then
 
+		-- jungle day time
 		if num_jungletree > 90 then
 			return {jungle = jungle}
 		end
 
+		-- normal day time
 		return {day = day}
 	else
 
+		-- jungle night time
 		if num_jungletree > 90 then
 			return {jungle_night = jungle_night}
 		end
 
+		-- normal night time
 		return {night = night}
 	end
 
 	-- END Ambiance
-
 end
 
 -- play sound, set handler then delete handler when sound finished
@@ -330,6 +351,7 @@ local still_playing = function(still_playing, player_name)
 	if not still_playing.largefire then stop_sound(largefire, player_name) end
 	if not still_playing.jungle then stop_sound(jungle, player_name) end
 	if not still_playing.jungle_night then stop_sound(jungle_night, player_name) end
+	if not still_playing.ice then stop_sound(ice, player_name) end
 end
 
 -- player routine
