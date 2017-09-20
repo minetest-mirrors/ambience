@@ -1,5 +1,5 @@
 
---= Ambience lite by TenPlus1 (23rd August 2017)
+--= Ambience lite by TenPlus1 (20th September 2017)
 
 local max_frequency_all = 1000 -- larger number means more frequent sounds (100-2000)
 local SOUNDVOLUME = 1.0
@@ -189,7 +189,7 @@ local get_ambience = function(player)
 			"fire:basic_flame", "fire:permanent_flame",
 			"default:lava_flowing", "default:lava_source", "default:jungletree",
 			"default:water_flowing", "default:water_source", "default:ice",
-			"default:river_water_flowing", "default:river_water_source",
+			"default:river_water_flowing",
 			"default:desert_sand", "default:desert_stone", "default:snowblock"
 		})
 
@@ -200,7 +200,7 @@ local get_ambience = function(player)
 	num_desert = (cn["default:desert_sand"] or 0) + (cn["default:desert_stone"] or 0)
 	num_snow = (cn["default:snowblock"] or 0)
 	num_jungletree = (cn["default:jungletree"] or 0)
-	num_river = (cn["default:river_water_source"] or 0) + (cn["default:river_water_flowing"] or 0)
+	num_river = (cn["default:river_water_flowing"] or 0)
 	num_ice = (cn["default:ice"] or 0)
 --[[
 print (
