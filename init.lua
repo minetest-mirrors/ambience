@@ -132,7 +132,7 @@ local get_ambience = function(player)
 
 	-- who and where am I?
 	--local player_name = player:get_player_name()
-	local pos = player:getpos()
+	local pos = player:get_pos()
 
 	-- what is around me?
 	pos.y = pos.y + 1.4 -- head level
