@@ -1,5 +1,5 @@
 
---= Ambience lite by TenPlus1 (20th September 2017)
+--= Ambience lite by TenPlus1
 
 local max_frequency_all = 1000 -- larger number means more frequent sounds (100-2000)
 local SOUNDVOLUME = 1.0
@@ -14,7 +14,7 @@ minetest.override_item("default:river_water_flowing", { sounds = {} })
 -- music settings
 local music_handler = nil
 local MUSICVOLUME = 1
-local play_music = minetest.setting_getbool("ambience_music") ~= false
+local play_music = minetest.settings:get_bool("ambience_music") ~= false
 
 -- sound sets (gain defaults to 0.3 unless specifically set)
 

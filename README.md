@@ -12,5 +12,6 @@ Based on Immersive Sounds .36 mod by Neuromancer and optimized to run on servers
 - 0.8 - Override default water sounds for 0.4.14 dev and above, add separate gain for each sound
 - 0.9 - Plays music files on server or local client when found at midnight, files to be named "ambience_music.1.ogg" changing number each up to 9.
 - 1.0 - Added icecrack sound when walking on snow/ice flows, also tidied code
+- 1.1 - Using newer functions, Minetest 0.4.16 and above needed to run
 
 Code license: MIT
