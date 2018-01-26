@@ -173,7 +173,8 @@ local get_ambience = function(player)
 	end
 
 	-- wading through water
-	if minetest.registered_nodes[nod_feet].groups.water then
+	if minetest.registered_nodes[nod_feet]
+	and minetest.registered_nodes[nod_feet].groups.water then
 
 		local control = player:get_player_control()
 
