@@ -16,6 +16,9 @@ local music_handler = nil
 local MUSICVOLUME = 1
 local play_music = minetest.settings:get_bool("ambience_music") ~= false
 
+-- is playerplus running?
+local pplus = minetest.get_modpath("playerplus")
+
 -- sound sets (gain defaults to 0.3 unless specifically set)
 
 local night = {
@@ -63,6 +66,7 @@ local beach = {
 local desert = {
 	handler = {}, frequency = 20,
 	{name = "coyote", length = 2.5},
+	{name = "wind", length = 9},
 	{name = "desertwind", length = 8}
 }
 
@@ -121,6 +125,8 @@ local jungle_night = {
 local ice = {
 	handler = {}, frequency = 250,
 	{name = "icecrack", length = 23},
+	{name = "desertwind", length = 8},
+	{name = "wind", length = 9},
 }
 
 local radius = 6
@@ -130,18 +136,30 @@ local num_fire, num_lava, num_water_flowing, num_water_source, num_air,
 -- check where player is and which sounds are played
 local get_ambience = function(player)
 
-	-- who and where am I?
+	-- where am I?
 	--local player_name = player:get_player_name()
 	local pos = player:get_pos()
 
 	-- what is around me?
-	pos.y = pos.y + 1.4 -- head level
-	local nod_head = minetest.get_node(pos).name
+	local nod_head, nod_feet
 
-	pos.y = pos.y - 1.2 -- foot level
-	local nod_feet = minetest.get_node(pos).name
+	-- is playerplus in use?
+	if pplus then
 
-	pos.y = pos.y - 0.2 -- reset pos
+		local name = player:get_player_name()
+
+		nod_head = playerplus[name].nod_head
+		nod_feet = playerplus[name].nod_feet
+	else
+
+		pos.y = pos.y + 1.4 -- head level
+		local nod_head = minetest.get_node(pos).name
+
+		pos.y = pos.y - 1.2 -- foot level
+		local nod_feet = minetest.get_node(pos).name
+
+		pos.y = pos.y - 0.2 -- reset pos
+	end
 
 	local tod = minetest.get_timeofday()
 
