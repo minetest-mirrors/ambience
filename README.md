@@ -14,6 +14,6 @@ Based on Immersive Sounds .36 mod by Neuromancer and optimized to run on servers
 - 0.9 - Plays music files on server or local client when found at midnight, files to be named "ambience_music.1.ogg" changing number each up to 9.
 - 1.0 - Added icecrack sound when walking on snow/ice flows, also tidied code
 - 1.1 - Using newer functions, Minetest 0.4.16 and above needed to run
-- 1.2 - Added PlayerPlus compatibility and removed fire sounds for defaults
+- 1.2 - Added PlayerPlus compatibility, removed fire sounds, added volume changes
 
 Code license: MIT

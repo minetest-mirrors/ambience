@@ -92,12 +92,12 @@ local lava = {
 
 local river = {
 	handler = {}, frequency = 1000,
-	{name = "river", length = 4}
+	{name = "river", length = 4, gain = 0.1}
 }
 
 local smallfire = {
 	handler = {}, frequency = 1000,
-	{name = "fire_small", length = 6}
+	{name = "fire_small", length = 6, gain = 0.1}
 }
 
 local largefire = {
@@ -227,6 +227,7 @@ print (
 	"lv:" .. num_lava,
 	"wf:" .. num_water_flowing,
 	"ws:" .. num_water_source,
+	"rv:" .. num_river,
 	"ds:" .. num_desert,
 	"sn:" .. num_snow,
 	"ic:" .. num_ice,
@@ -239,23 +240,32 @@ print (
 		if num_fire > 8 then
 			return {largefire = largefire}
 
+		elseif num_fire > 3 then
+			return {smallfire = smallfire}, 0.2
+
 		elseif num_fire > 0 then
 			return {smallfire = smallfire}
 		end
 	end
 
 	-- lava
-	if num_lava > 5 then
+	if num_lava > 50 then
+		return {lava = lava}, 0.5
+	elseif num_lava > 5 then
 		return {lava = lava}
 	end
 
 	-- flowing water
-	if num_water_flowing > 30 then
+	if num_water_flowing > 50 then
+		return {flowing_water = flowing_water}, 0.5
+	elseif num_water_flowing > 20 then
 		return {flowing_water = flowing_water}
 	end
 
 	-- flowing river
-	if num_river > 30 then
+	if num_river > 20 then
+		return {river = river}, 0.4
+	elseif num_river > 5 then
 		return {river = river}
 	end
 
@@ -311,13 +321,13 @@ print (
 end
 
 -- play sound, set handler then delete handler when sound finished
-local play_sound = function(player_name, list, number)
+local play_sound = function(player_name, list, number, MORE_GAIN)
 
 	if list.handler[player_name] == nil then
 
 		local handler = minetest.sound_play(list[number].name, {
 			to_player = player_name,
-			gain = (list[number].gain or 0.3) * SOUNDVOLUME
+			gain = ((list[number].gain or 0.3) + (MORE_GAIN or 0)) * SOUNDVOLUME
 		})
 
 		if handler then
@@ -385,6 +395,7 @@ minetest.register_globalstep(function(dtime)
 	timer = 0
 
 	local players = minetest.get_connected_players()
+	local MORE_GAIN
 
 	for n = 1, #players do
 
@@ -392,7 +403,7 @@ minetest.register_globalstep(function(dtime)
 
 --local t1 = os.clock()
 
-		ambiences = get_ambience(players[n])
+		ambiences, MORE_GAIN = get_ambience(players[n])
 
 --print(string.format("elapsed time: %.4f\n", os.clock() - t1))
 
@@ -402,7 +413,7 @@ minetest.register_globalstep(function(dtime)
 
 			if math.random(1, 1000) <= ambience.frequency then
 
-				play_sound(player_name, ambience, math.random(1, #ambience))
+				play_sound(player_name, ambience, math.random(1, #ambience), MORE_GAIN)
 			end
 		end
 	end
