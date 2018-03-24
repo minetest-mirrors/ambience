@@ -102,7 +102,7 @@ local smallfire = {
 
 local largefire = {
 	handler = {}, frequency = 1000,
-	{name = "fire_large", length = 8, gain = 0.8}
+	{name = "fire_large", length = 8, gain = 0.4}
 }
 
 local jungle = {
@@ -237,7 +237,10 @@ print (
 	-- is fire redo mod active?
 	if fire and fire.mod and fire.mod == "redo" then
 
-		if num_fire > 8 then
+		if num_fire > 16 then
+			return {largefire = largefire}, 0.4
+
+		elseif num_fire > 8 then
 			return {largefire = largefire}
 
 		elseif num_fire > 3 then
