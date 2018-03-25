@@ -153,10 +153,10 @@ local get_ambience = function(player)
 	else
 
 		pos.y = pos.y + 1.4 -- head level
-		local nod_head = minetest.get_node(pos).name
+		nod_head = minetest.get_node(pos).name
 
 		pos.y = pos.y - 1.2 -- foot level
-		local nod_feet = minetest.get_node(pos).name
+		nod_feet = minetest.get_node(pos).name
 
 		pos.y = pos.y - 0.2 -- reset pos
 	end
