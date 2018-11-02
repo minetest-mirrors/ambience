@@ -96,8 +96,8 @@ ambience.add_set("smallfire", {
 
 		if fire and fire.mod and fire.mod == "redo" then
 
-			local c = (def.totals["fire:basic_flame"] or 0) +
-					(def.totals["fire:permanent_flame"] or 0)
+			local c = (def.totals["fire:basic_flame"] or 0)
+				+ (def.totals["fire:permanent_flame"] or 0)
 
 			if c > 3 and c < 9 then
 				return "smallfire", 0.2
@@ -121,8 +121,8 @@ ambience.add_set("largefire", {
 
 		if fire and fire.mod and fire.mod == "redo" then
 
-			local c = (def.totals["fire:basic_flame"] or 0) +
-					(def.totals["fire:permanent_flame"] or 0)
+			local c = (def.totals["fire:basic_flame"] or 0)
+				+ (def.totals["fire:permanent_flame"] or 0)
 
 			if c > 16 then
 				return "largefire", 0.4
@@ -144,8 +144,8 @@ ambience.add_set("lava", {
 	},
 	sound_check = function(def)
 
-		local c = (def.totals["default:lava_source"] or 0) +
-			(def.totals["default:lava_flowing"] or 0)
+		local c = (def.totals["default:lava_source"] or 0)
+			+ (def.totals["default:lava_flowing"] or 0)
 
 		if c > 50 then
 			return "lava", 0.5
@@ -210,8 +210,8 @@ ambience.add_set("desert", {
 	},
 	sound_check = function(def)
 
-		local c = (def.totals["default:desert_sand"] or 0) +
-			(def.totals["default:sand"] or 0)
+		local c = (def.totals["default:desert_sand"] or 0)
+			+ (def.totals["default:sand"] or 0)
 
 		if c > 150 and pos.y > 10 then
 			return "desert"
@@ -299,7 +299,7 @@ ambience.add_set("jungle_night", {
 	nodes = {"default:jungletree"}
 })
 
--- Nighttime sounds play at night (default sounds near end of list)
+-- Nighttime sounds play at night when around leaves and above ground
 
 ambience.add_set("night", {
 	frequency = 40,
@@ -312,13 +312,20 @@ ambience.add_set("night", {
 	},
 	sound_check = function(def)
 
-		if (def.tod < 0.2 or def.tod > 0.8) and def.pos.y > -10 then
+		local c = (def.totals["default:leaves"] or 0)
+			+ (def.totals["default:bush_leaves"] or 0)
+			+ (def.totals["default:pine_leaves"] or 0)
+			+ (def.totals["default:aspen_leaves"] or 0)
+
+		if (def.tod < 0.2 or def.tod > 0.8)
+		and def.pos.y > -10
+		and c > 5 then
 			return "night"
 		end
 	end,
 })
 
--- Daytime sounds play during day (default sounds near end of list)
+-- Daytime sounds play during day when around leaves and above ground
 
 ambience.add_set("day", {
 	frequency = 40,
@@ -335,8 +342,16 @@ ambience.add_set("day", {
 	},
 	sound_check = function(def)
 
-		if (def.tod > 0.2 and def.tod < 0.8) and def.pos.y > -10 then
+		local c = (def.totals["default:leaves"] or 0)
+			+ (def.totals["default:bush_leaves"] or 0)
+			+ (def.totals["default:pine_leaves"] or 0)
+			+ (def.totals["default:aspen_leaves"] or 0)
+
+		if (def.tod > 0.2 and def.tod < 0.8)
+		and def.pos.y > -10
+		and c > 5 then
 			return "day"
 		end
 	end,
+	nodes = {"group:leaves"}
 })
