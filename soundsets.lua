@@ -199,7 +199,7 @@ ambience.add_set("ice", {
 	nodes = {"default:ice"},
 })
 
--- Desert sounds play when near 150+ desert sand or stone
+-- Desert sounds play when near 150+ desert or normal sand
 
 ambience.add_set("desert", {
 	frequency = 20,
@@ -211,16 +211,16 @@ ambience.add_set("desert", {
 	sound_check = function(def)
 
 		local c = (def.totals["default:desert_sand"] or 0) +
-			(def.totals["default:desert_stone"] or 0)
+			(def.totals["default:sand"] or 0)
 
-		if c > 150 then
+		if c > 150 and pos.y > 10 then
 			return "desert"
 		end
 	end,
-	nodes = {"default:desert_sand", "default:desert_stone"}
+	nodes = {"default:desert_sand", "default:sand"}
 })
 
--- Winds play when player is above 60 Y position and near 150+ snow blocks
+-- Winds play when player is above 50 Y position and near 150+ snow blocks
 
 ambience.add_set("high_up", {
 	frequency = 40,
@@ -232,7 +232,7 @@ ambience.add_set("high_up", {
 
 		local c = (def.totals["default:snowblock"] or 0)
 
-		if def.pos.y > 60
+		if def.pos.y > 50
 		or c > 150 then
 			return "high_up"
 		end
