@@ -43,6 +43,48 @@ ambience.add_set("splash", {
 	end,
 })
 
+-- Water sound plays when near flowing water, will get louder if more than 50
+
+ambience.add_set("flowing_water", {
+	frequency = 1000,
+	sounds = {
+		{name = "waterfall", length = 6}
+	},
+	sound_check = function(def)
+
+		local c = (def.totals["default:water_flowing"] or 0)
+
+		if c > 50 then
+			return "flowing_water", 0.5
+
+		elseif c > 20 then
+			return "flowing_water"
+		end
+	end,
+	nodes = {"default:water_flowing"}
+})
+
+-- River sound plays when near flowing river, will get louder if more than 20
+
+ambience.add_set("river", {
+	frequency = 1000,
+	sounds = {
+		{name = "river", length = 4, gain = 0.1}
+	},
+	sound_check = function(def)
+
+		local c = (def.totals["default:river_water_flowing"] or 0)
+
+		if c > 20 then
+			return "river", 0.4
+
+		elseif c > 5 then
+			return "river"
+		end
+	end,
+	nodes = {"default:river_water_flowing"}
+})
+
 -- Small fire sound plays when near flame, will get louder if more than 3
 
 ambience.add_set("smallfire", {
@@ -113,48 +155,6 @@ ambience.add_set("lava", {
 		end
 	end,
 	nodes = {"default:lava_source", "default:lava_flowing"}
-})
-
--- Water sound plays when near flowing water, will get louder if more than 50
-
-ambience.add_set("flowing_water", {
-	frequency = 1000,
-	sounds = {
-		{name = "waterfall", length = 6}
-	},
-	sound_check = function(def)
-
-		local c = (def.totals["default:water_flowing"] or 0)
-
-		if c > 50 then
-			return "flowing_water", 0.5
-
-		elseif c > 20 then
-			return "flowing_water"
-		end
-	end,
-	nodes = {"default:water_flowing"}
-})
-
--- River sound plays when near flowing river, will get louder if more than 20
-
-ambience.add_set("river", {
-	frequency = 1000,
-	sounds = {
-		{name = "river", length = 4, gain = 0.1}
-	},
-	sound_check = function(def)
-
-		local c = (def.totals["default:river_water_flowing"] or 0)
-
-		if c > 20 then
-			return "river", 0.4
-
-		elseif c > 5 then
-			return "river"
-		end
-	end,
-	nodes = {"default:river_water_flowing"}
 })
 
 -- Beach sounds play when around 0-7 player Y position and 150+ water source found
