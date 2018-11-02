@@ -312,7 +312,7 @@ ambience.add_set("night", {
 	},
 	sound_check = function(def)
 
-		if def.tod < 0.2 or def.tod > 0.8 then
+		if (def.tod < 0.2 or def.tod > 0.8) and def.pos.y > -10 then
 			return "night"
 		end
 	end,
@@ -335,7 +335,7 @@ ambience.add_set("day", {
 	},
 	sound_check = function(def)
 
-		if def.tod > 0.2 and def.tod < 0.8 then
+		if (def.tod > 0.2 and def.tod < 0.8) and def.pos.y > -10 then
 			return "day"
 		end
 	end,
