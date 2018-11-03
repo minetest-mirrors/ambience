@@ -213,7 +213,7 @@ ambience.add_set("desert", {
 		local c = (def.totals["default:desert_sand"] or 0)
 			+ (def.totals["default:sand"] or 0)
 
-		if c > 150 and pos.y > 10 then
+		if c > 150 and def.pos.y > 10 then
 			return "desert"
 		end
 	end,
