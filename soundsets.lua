@@ -89,8 +89,19 @@ ambience.add_set("river", {
 	nodes = {"default:river_water_flowing"}
 })
 else
-	print ("[Ambience] found env_sounds, flowing water sounds disabled")
+	print ("[Ambience] found env_sounds, flowing water sounds disabled.")
 end
+
+-- Only add fire sounds set if flame_sound is disabled or fire redo active
+
+local flame_sound = minetest.settings:get_bool("flame_sound", true)
+local fire_redo = minetest.get_modpath("fire") and fire.mod and fire.mod == "redo"
+
+if flame_sound and not fire_redo then
+
+	print ("[Ambience] fire sounds not enabled, already active in fire mod.")
+
+else
 
 -- Small fire sound plays when near flame, will get louder if more than 3
 
@@ -101,17 +112,14 @@ ambience.add_set("smallfire", {
 	},
 	sound_check = function(def)
 
-		if fire and fire.mod and fire.mod == "redo" then
+		local c = (def.totals["fire:basic_flame"] or 0)
+			+ (def.totals["fire:permanent_flame"] or 0)
 
-			local c = (def.totals["fire:basic_flame"] or 0)
-				+ (def.totals["fire:permanent_flame"] or 0)
+		if c > 3 and c < 9 then
+			return "smallfire", 0.2
 
-			if c > 3 and c < 9 then
-				return "smallfire", 0.2
-
-			elseif c > 0 and c < 4 then
-				return "smallfire"
-			end
+		elseif c > 0 and c < 4 then
+			return "smallfire"
 		end
 	end,
 	nodes = {"fire:basic_flame", "fire:permanent_flame"}
@@ -126,21 +134,20 @@ ambience.add_set("largefire", {
 	},
 	sound_check = function(def)
 
-		if fire and fire.mod and fire.mod == "redo" then
+		local c = (def.totals["fire:basic_flame"] or 0)
+			+ (def.totals["fire:permanent_flame"] or 0)
 
-			local c = (def.totals["fire:basic_flame"] or 0)
-				+ (def.totals["fire:permanent_flame"] or 0)
+		if c > 16 then
+			return "largefire", 0.4
 
-			if c > 16 then
-				return "largefire", 0.4
-
-			elseif c > 8 then
-				return "largefire"
-			end
+		elseif c > 8 then
+			return "largefire"
 		end
 	end,
 	nodes = {"fire:basic_flame", "fire:permanent_flame"}
 })
+
+end
 
 -- Lava sound plays when near lava, will get louder if more than 50
 

@@ -22,46 +22,47 @@ local set_nodes = {} -- all the nodes needed for sets
 -- global functions
 ambience.add_set = function(set_name, def)
 
-	if set_name and def then
+	if not set_name or not def then
+		return
+	end
 
-		sound_sets[set_name] = {
-			frequency = def.frequency or 50,
-			sounds = def.sounds,
-			sound_check = def.sound_check,
-			nodes = def.nodes,
-		}
+	sound_sets[set_name] = {
+		frequency = def.frequency or 50,
+		sounds = def.sounds,
+		sound_check = def.sound_check,
+		nodes = def.nodes
+	}
 
-		-- add set name to the sound_set_order table
-		local can_add = true
+	-- add set name to the sound_set_order table
+	local can_add = true
 
-		for i = 1, #sound_set_order do
+	for i = 1, #sound_set_order do
 
-			if sound_set_order[i] == set_name then
-				can_add = false
+		if sound_set_order[i] == set_name then
+			can_add = false
+		end
+	end
+
+	if can_add then
+		table.insert(sound_set_order, set_name)
+	end
+
+	-- add any missing nodes to the set_nodes table
+	if def.nodes then
+
+		for i = 1, #def.nodes do
+
+			can_add = def.nodes[i]
+
+			for j = 1, #set_nodes do
+
+				if def.nodes[i] == set_nodes[j] then
+					can_add = false
+				end
 			end
-		end
 
-		if can_add then
-			table.insert(sound_set_order, set_name)
-		end
-
-		-- add any missing nodes to the set_nodes table
-		if def.nodes then
-
-			for i = 1, #def.nodes do
-
-				can_add = def.nodes[i]
-
-				for j = 1, #set_nodes do
-
-					if def.nodes[i] == set_nodes[j] then
-						can_add = false
-					end
-				end
-
-				if can_add then
-					table.insert(set_nodes, can_add)
-				end
+			if can_add then
+				table.insert(set_nodes, can_add)
 			end
 		end
 	end
