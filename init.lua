@@ -133,7 +133,6 @@ local get_ambience = function(player, tod, name)
 
 	pos.y = pos.y - 0.2 -- reset pos
 
-
 	-- get all set nodes around player
 	local ps, cn = minetest.find_nodes_in_area(
 		{x = pos.x - radius, y = pos.y - radius, z = pos.z - radius},
@@ -189,7 +188,15 @@ minetest.register_globalstep(function(dtime)
 
 --print(string.format("elapsed time: %.4f\n", os.clock() - t1))
 
-		if set_name then
+local ok = true
+
+	-- check set exists
+		if set_name ~= nil and not sound_sets[set_name] then
+			print("[ambience] sound set doesn't exist:", set_name)
+			ok = false
+		end
+
+		if ok and set_name then
 
 			-- stop sound if another set active
 			if playing[player_name]
@@ -198,17 +205,19 @@ minetest.register_globalstep(function(dtime)
 				if playing[player_name].sound ~= set_name
 				or (playing[player_name].sound == set_name
 				and playing[player_name].gain ~= MORE_GAIN) then
-
+--print ("-- change stop")
 					minetest.sound_stop(playing[player_name].handler)
 
 					playing[player_name].sound = nil
 					playing[player_name].handler = nil
 					playing[player_name].gain = nil
 				else
-					return
+--					return
+					ok = false
 				end
 			end
 
+if ok then
 			-- choose random sound from set selected
 			number = random(1, #sound_sets[set_name].sounds)
 			ambience = sound_sets[set_name].sounds[number]
@@ -233,6 +242,7 @@ minetest.register_globalstep(function(dtime)
 					playing[player_name].handler = handler
 					playing[player_name].sound = set_name
 					playing[player_name].gain = MORE_GAIN
+					playing[player_name].old_handler = handler
 
 					minetest.after(ambience.length, function(args)
 
@@ -240,18 +250,23 @@ minetest.register_globalstep(function(dtime)
 
 						if playing[player_name]
 						and playing[player_name].handler
-						and playing[player_name].sound == set_name then
-
+						and playing[player_name].sound == set_name
+						and handler == playing[player_name].old_handler then
+--print("-- timed stop")
 							minetest.sound_stop(playing[player_name].handler)
 
 							playing[player_name].sound = nil
 							playing[player_name].handler = nil
 							playing[player_name].gain = nil
+							playing[player_name].old_handler = handler
 						end
 
 					end, {ambience, player_name})
 				end
 			end
+
+end -- end ok
+
 		end
 	end
 end)

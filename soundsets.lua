@@ -44,7 +44,6 @@ ambience.add_set("splash", {
 })
 
 -- check for env_sounds mod, if not found enable water flowing sounds
-
 if not minetest.get_modpath("env_sounds") then
 
 -- Water sound plays when near flowing water, will get louder if more than 50
@@ -58,12 +57,10 @@ ambience.add_set("flowing_water", {
 
 		local c = (def.totals["default:water_flowing"] or 0)
 
-		if c > 50 then
-			return "flowing_water", 0.5
-
-		elseif c > 20 then
-			return "flowing_water"
+		if c > 5 then
+			return "flowing_water", math.min(0.04 + c * 0.004, 0.6)
 		end
+
 	end,
 	nodes = {"default:water_flowing"}
 })
@@ -79,12 +76,10 @@ ambience.add_set("river", {
 
 		local c = (def.totals["default:river_water_flowing"] or 0)
 
-		if c > 20 then
-			return "river", 0.4
-
-		elseif c > 5 then
-			return "river"
+		if c > 5 then
+			return "river", math.min(0.04 + c * 0.004, 0.5)
 		end
+
 	end,
 	nodes = {"default:river_water_flowing"}
 })
