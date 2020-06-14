@@ -199,7 +199,7 @@ minetest.register_globalstep(function(dtime)
 
 		ok = true -- everything starts off ok
 
-	-- check set exists
+		-- check set exists
 		if set_name ~= nil and not sound_sets[set_name] then
 
 			print("[ambience] sound set doesn't exist:", set_name)
