@@ -203,9 +203,9 @@ ambience.add_set("beach", {
 	frequency = 40,
 
 	sounds = {
-		{name = "seagull", length = 4.5},
+		{name = "seagull", length = 4.5, ephemeral = true},
 		{name = "beach", length = 13},
-		{name = "gull", length = 1},
+		{name = "gull", length = 1, ephemeral = true},
 		{name = "beach_2", length = 6}
 	},
 
@@ -252,7 +252,7 @@ ambience.add_set("desert", {
 	frequency = 20,
 
 	sounds = {
-		{name = "coyote", length = 2.5},
+		{name = "coyote", length = 2.5, ephemeral = true},
 		{name = "wind", length = 9},
 		{name = "desertwind", length = 8}
 	},
@@ -277,8 +277,8 @@ ambience.add_set("cave", {
 	frequency = 60,
 
 	sounds = {
-		{name = "drippingwater1", length = 1.5},
-		{name = "drippingwater2", length = 1.5}
+		{name = "drippingwater1", length = 1.5, ephemeral = true},
+		{name = "drippingwater2", length = 1.5, ephemeral = true}
 	},
 
 	sound_check = function(def)
@@ -297,10 +297,10 @@ ambience.add_set("jungle", {
 
 	sounds = {
 		{name = "jungle_day_1", length = 7},
-		{name = "deer", length = 7},
+		{name = "deer", length = 7, ephemeral = true},
 		{name = "canadianloon2", length = 14},
 		{name = "bird1", length = 11},
-		{name = "peacock", length = 2}
+		{name = "peacock", length = 2, ephemeral = true}
 	},
 
 	nodes = {"default:jungletree"},
@@ -322,10 +322,10 @@ ambience.add_set("jungle_night", {
 	frequency = 200,
 
 	sounds = {
-		{name = "jungle_night_1", length = 4},
-		{name = "jungle_night_2", length = 4},
-		{name = "deer", length = 7},
-		{name = "frog", length = 1}
+		{name = "jungle_night_1", length = 4, ephemeral = true},
+		{name = "jungle_night_2", length = 4, ephemeral = true},
+		{name = "deer", length = 7, ephemeral = true},
+		{name = "frog", length = 1, ephemeral = true}
 	},
 
 	sound_check = function(def)
@@ -346,14 +346,14 @@ ambience.add_set("day", {
 	frequency = 40,
 
 	sounds = {
-		{name = "cardinal", length = 3},
-		{name = "craw", length = 3},
-		{name = "bluejay", length = 6},
-		{name = "robin", length = 4},
+		{name = "cardinal", length = 3, ephemeral = true},
+		{name = "craw", length = 3, ephemeral = true},
+		{name = "bluejay", length = 6, ephemeral = true},
+		{name = "robin", length = 4, ephemeral = true},
 		{name = "bird1", length = 11},
-		{name = "bird2", length = 6},
-		{name = "crestedlark", length = 6},
-		{name = "peacock", length = 2},
+		{name = "bird2", length = 6, ephemeral = true},
+		{name = "crestedlark", length = 6, ephemeral = true},
+		{name = "peacock", length = 2, ephemeral = true},
 		{name = "wind", length = 9}
 	},
 
@@ -382,11 +382,11 @@ ambience.add_set("night", {
 	frequency = 40,
 
 	sounds = {
-		{name = "hornedowl", length = 2},
-		{name = "wolves", length = 4, gain = 0.4},
-		{name = "cricket", length = 6},
-		{name = "deer", length = 7},
-		{name = "frog", length = 1}
+		{name = "hornedowl", length = 2, ephemeral = true},
+		{name = "wolves", length = 4, gain = 0.4, ephemeral = true},
+		{name = "cricket", length = 6, ephemeral = true},
+		{name = "deer", length = 7, ephemeral = true},
+		{name = "frog", length = 1, ephemeral = true}
 	},
 
 	sound_check = function(def)

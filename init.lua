@@ -244,7 +244,7 @@ minetest.register_globalstep(function(dtime)
 				handler = minetest.sound_play(ambience.name, {
 					to_player = player_name,
 					gain = ((ambience.gain or 0.3) + (MORE_GAIN or 0)) * SOUNDVOLUME
-				})
+				}, ambience.ephemeral)
 
 				-- only continue if sound is playing
 				if handler then
