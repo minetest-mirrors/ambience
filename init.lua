@@ -199,88 +199,81 @@ minetest.register_globalstep(function(dtime)
 
 		ok = true -- everything starts off ok
 
-		-- check set exists
-		if set_name ~= nil and not sound_sets[set_name] then
+		-- stop current sound if another set active or gain changed
+		if playing[player_name]
+		and playing[player_name].handler then
 
-			print("[ambience] sound set doesn't exist:", set_name)
+			if playing[player_name].set ~= set_name
+			or (playing[player_name].set == set_name
+			and playing[player_name].gain ~= MORE_GAIN) then
 
-			ok = false -- don't continue, set missing
+--print ("-- change stop", set_name, playing[player_name].old_handler)
+
+				minetest.sound_stop(playing[player_name].old_handler)
+
+				playing[player_name].set = nil
+				playing[player_name].handler = nil
+				playing[player_name].gain = nil
+			else
+				ok = false -- sound set still playing, skip new sound
+			end
 		end
 
-		-- are we ok and have a set name
-		if ok and set_name then
+		-- set random chance and reset seed
+		chance = random(1, 1000)
 
-			-- stop current sound if another set active or gain changed
-			if playing[player_name]
-			and playing[player_name].handler then
+		math.randomseed(tod + chance)
 
-				if playing[player_name].sound ~= set_name
-				or (playing[player_name].sound == set_name
-				and playing[player_name].gain ~= MORE_GAIN) then
---print ("-- change stop")
-					minetest.sound_stop(playing[player_name].handler)
+		-- if chance is lower than set frequency then select set
+		if ok and set_name and chance < sound_sets[set_name].frequency then
 
-					playing[player_name].sound = nil
-					playing[player_name].handler = nil
-					playing[player_name].gain = nil
-				else
-					ok = false -- sound set still playing, skip new sound
-				end
-			end
+			-- choose random sound from set
+			number = random(#sound_sets[set_name].sounds)
+			ambience = sound_sets[set_name].sounds[number]
 
-			-- set random chance and reset seed
-			chance = random(1, 1000)
-
-			math.randomseed(tod + chance)
-
-			-- if chance is lower than set frequency then select set
-			if ok and chance < sound_sets[set_name].frequency then
-
-				-- choose random sound from set selected
-				number = random(1, #sound_sets[set_name].sounds)
-				ambience = sound_sets[set_name].sounds[number]
-
-				-- play sound
-				handler = minetest.sound_play(ambience.name, {
-					to_player = player_name,
-					gain = ((ambience.gain or 0.3) + (MORE_GAIN or 0)) * SOUNDVOLUME
-				}, ambience.ephemeral)
-
-				-- only continue if sound is playing
-				if handler then
+			-- play sound
+			handler = minetest.sound_play(ambience.name, {
+				to_player = player_name,
+				gain = ((ambience.gain or 0.3) + (MORE_GAIN or 0)) * SOUNDVOLUME,
+				pitch = ambience.pitch or 1.0
+			}, ambience.ephemeral)
 
 --print ("playing... " .. ambience.name .. " (" .. chance .. " < "
 --		.. sound_sets[set_name].frequency .. ") @ ", MORE_GAIN)
 
-					-- set what player is currently listening to
-					playing[player_name] = playing[player_name] or {}
-					playing[player_name].handler = handler
-					playing[player_name].sound = set_name
-					playing[player_name].gain = MORE_GAIN
-					playing[player_name].old_handler = handler
+			-- only continue if sound playing returns handler
+			if handler then
 
-					-- set timer to stop sound
-					minetest.after(ambience.length, function(args)
+--print("-- current handler", handler)
 
-						local player_name = args[2]
+				-- set what player is currently listening to
+				playing[player_name] = playing[player_name] or {}
+				playing[player_name].handler = handler
+				playing[player_name].set = set_name
+				playing[player_name].gain = MORE_GAIN
+				playing[player_name].old_handler = handler
 
-						-- make sure we are stopping same sound we started
-						if playing[player_name]
-						and playing[player_name].handler
-						and playing[player_name].sound == set_name
-						and handler == playing[player_name].old_handler then
---print("-- timed stop")
-							minetest.sound_stop(playing[player_name].handler)
+				-- set timer to stop sound
+				minetest.after(ambience.length, function()
 
-							-- reset player variables
-							playing[player_name].sound = nil
-							playing[player_name].handler = nil
-							playing[player_name].gain = nil
-							playing[player_name].old_handler = handler
-						end
+					-- make sure we are stopping same sound we started
+					if playing[player_name]
+					and playing[player_name].handler
+					and playing[player_name].set == set_name
+					and handler == playing[player_name].old_handler then
 
-					end, {ambience, player_name})
-				end
+--print("-- timed stop", set_name, handler)
+
+						--minetest.sound_stop(playing[player_name].handler)
+						minetest.sound_stop(playing[player_name].old_handler)
+
+						-- reset player variables and backup handler
+						playing[player_name].set = nil
+						playing[player_name].handler = nil
+						playing[player_name].gain = nil
+						playing[player_name].old_handler = handler
+					end
+				end)
 			end
 		end
 	end
