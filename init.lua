@@ -125,7 +125,7 @@ local get_ambience = function(player, tod, name)
 
 
 	-- get foot and head level nodes at player position
-	local pos = player:get_pos()
+	local pos = player:get_pos() ; if not pos then return end
 
 	pos.y = pos.y + 1.4 -- head level
 
