@@ -206,10 +206,10 @@ minetest.register_globalstep(function(dtime)
 
 --print(string.format("elapsed time: %.4f\n", os.clock() - t1))
 
-		ok = true -- everything starts off ok
+		ok = playing[player_name] -- everything starts off ok if player around
 
 		-- are we playing something already?
-		if playing[player_name].handler then
+		if ok and playing[player_name].handler then
 
 			-- stop current sound if another set active or gain changed
 			if playing[player_name].set ~= set_name
@@ -263,7 +263,8 @@ minetest.register_globalstep(function(dtime)
 --print("-- after", set_name, handler)
 
 					-- make sure we are stopping same sound we started
-					if playing[player_name].handler
+					if playing[player_name]
+					and playing[player_name].handler
 					and playing[player_name].handler == handler then
 
 --print("-- timed stop", set_name, handler)
