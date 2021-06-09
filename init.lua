@@ -1,13 +1,6 @@
 
 ambience = {}
 
--- override default water sounds
-minetest.override_item("default:water_source", { sounds = {} })
-minetest.override_item("default:water_flowing", { sounds = {} })
-minetest.override_item("default:river_water_source", { sounds = {} })
-minetest.override_item("default:river_water_flowing", { sounds = {} })
-
-
 -- settings
 local SOUNDVOLUME = 1.0
 local MUSICVOLUME = 1.0
@@ -132,13 +125,14 @@ local get_ambience = function(player, tod, name)
 
 	-- get foot and head level nodes at player position
 	local pos = player:get_pos() ; if not pos then return end
+	local prop = player:get_properties()
 
-	pos.y = pos.y + 1.4 -- head level
+	pos.y = pos.y + prop.eye_height -- eye level
 
 	local nod_head = pplus and name and playerplus[name]
 			and playerplus[name].nod_head or minetest.get_node(pos).name
 
-	pos.y = pos.y - 1.2 -- foot level
+	pos.y = (pos.y - prop.eye_height) + 0.2 -- foot level
 
 	local nod_feet = pplus and name and playerplus[name]
 			and playerplus[name].nod_feet or minetest.get_node(pos).name
@@ -190,19 +184,17 @@ minetest.register_globalstep(function(dtime)
 	if timer < 1 then return end
 	timer = 0
 
-	-- get list of players and set some variables
-	local players = minetest.get_connected_players()
 	local player_name, number, chance, ambience, handler, ok
 	local tod = minetest.get_timeofday()
 
 	-- loop through players
-	for n = 1, #players do
+	for _, player in ipairs(minetest.get_connected_players()) do
 
-		player_name = players[n]:get_player_name()
+		player_name = player:get_player_name()
 
 --local t1 = os.clock()
 
-		local set_name, MORE_GAIN = get_ambience(players[n], tod, player_name)
+		local set_name, MORE_GAIN = get_ambience(player, tod, player_name)
 
 --print(string.format("elapsed time: %.4f\n", os.clock() - t1))
 
@@ -260,18 +252,13 @@ minetest.register_globalstep(function(dtime)
 				-- set timer to stop sound
 				minetest.after(ambience.length, function()
 
---print("-- after", set_name, handler)
+--print("-- timed stop after", set_name, handler, player_name)
 
-					-- make sure we are stopping same sound we started
-					if playing[player_name]
-					and playing[player_name].handler
-					and playing[player_name].handler == handler then
+					minetest.sound_stop(handler)
 
---print("-- timed stop", set_name, handler)
+					-- make sure player still around and reset variables
+					if playing[player_name] then
 
-						minetest.sound_stop(handler)
-
-						-- reset player variables
 						playing[player_name].set = nil
 						playing[player_name].gain = nil
 						playing[player_name].handler = nil
