@@ -252,12 +252,15 @@ minetest.register_globalstep(function(dtime)
 				-- set timer to stop sound
 				minetest.after(ambience.length, function()
 
---print("-- timed stop after", set_name, handler, player_name)
+--print("-- timed stop", set_name, handler)
 
 					minetest.sound_stop(handler)
 
-					-- make sure player still around and reset variables
-					if playing[player_name] then
+					-- reset variables if handlers match
+					if playing[player_name]
+					and playing[player_name].handler == handler then
+
+--print("-- timed reset", handler, player_name)
 
 						playing[player_name].set = nil
 						playing[player_name].gain = nil
