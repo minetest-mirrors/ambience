@@ -253,8 +253,9 @@ minetest.register_globalstep(function(dtime)
 				minetest.after(ambience.length, function()
 
 --print("-- timed stop", set_name, handler)
-
-					minetest.sound_stop(handler)
+					if handler then
+						minetest.sound_stop(handler)
+					end
 
 					-- reset variables if handlers match
 					if playing[player_name]
