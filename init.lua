@@ -250,7 +250,7 @@ minetest.register_globalstep(function(dtime)
 				playing[player_name].handler = handler
 
 				-- set timer to stop sound
-				minetest.after(ambience.length, function()
+				minetest.after(ambience.length, function(handler, player_name)
 
 --print("-- timed stop", set_name, handler)
 					if handler then
