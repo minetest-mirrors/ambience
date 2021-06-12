@@ -267,7 +267,7 @@ minetest.register_globalstep(function(dtime)
 						playing[player_name].gain = nil
 						playing[player_name].handler = nil
 					end
-				end)
+				end, handler, player_name)
 			end
 		end
 	end
