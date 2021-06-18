@@ -2,8 +2,8 @@
 ambience = {}
 
 -- settings
-local SOUNDVOLUME = 0.5
-local MUSICVOLUME = 1.0
+local SOUNDVOLUME = 1.0
+local MUSICVOLUME = 0.6
 local play_music = minetest.settings:get_bool("ambience_music") ~= false
 local pplus = minetest.get_modpath("playerplus")
 local radius = 6
