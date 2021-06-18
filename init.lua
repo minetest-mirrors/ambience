@@ -2,7 +2,7 @@
 ambience = {}
 
 -- settings
-local SOUNDVOLUME = 1.0
+local SOUNDVOLUME = 0.5
 local MUSICVOLUME = 1.0
 local play_music = minetest.settings:get_bool("ambience_music") ~= false
 local pplus = minetest.get_modpath("playerplus")
@@ -91,7 +91,7 @@ end
 
 -- setup table when player joins
 minetest.register_on_joinplayer(function(player)
-	playing[player:get_player_name()] = {}
+	playing[player:get_player_name()] = {music = -1}
 end)
 
 -- remove table when player leaves
@@ -103,24 +103,28 @@ end)
 -- plays music and selects sound set
 local get_ambience = function(player, tod, name)
 
-	-- play server or local music if available
-	if play_music then
+	-- play server or local music if music enabled and music not already playing
+	if play_music and MUSICVOLUME > 0 and playing[name].music < 0 then
 
-		-- play at midnight
-		if tod >= 0.0 and tod <= 0.01 then
+		-- count backwards
+		playing[name].music = playing[name].music -1
 
-			if not playing[name].music then
+		-- play music every 20 minutes
+		if playing[name].music < -(60 * 20) then
 
-				playing[name].music = minetest.sound_play("ambience_music", {
-					to_player = name,
-					gain = MUSICVOLUME
-				})
-			end
+			playing[name].music = minetest.sound_play("ambience_music", {
+				to_player = name,
+				gain = MUSICVOLUME
+			})
 
-		elseif tod > 0.1 and playing[name].music then
-
-			playing[name].music = nil
+			-- reset music timer after 10 minutes
+			minetest.after(60 * 10, function(name)
+				playing[name].music = -1
+			end, name)
 		end
+
+--print("-- music count", playing[name].music)
+
 	end
 
 	-- get foot and head level nodes at player position
@@ -198,7 +202,7 @@ minetest.register_globalstep(function(dtime)
 
 --print(string.format("elapsed time: %.4f\n", os.clock() - t1))
 
-		ok = playing[player_name] -- everything starts off ok if player around
+		ok = playing[player_name] -- everything starts off ok if player found
 
 		-- are we playing something already?
 		if ok and playing[player_name].handler then
@@ -295,19 +299,23 @@ minetest.register_chatcommand("svol", {
 -- music volume command (0 stops music)
 minetest.register_chatcommand("mvol", {
 	params = "<mvol>",
-	description = "set music volume (0.1 to 1.0)",
+	description = "set music volume (0.1 to 1.0, 0 to stop music)",
 	privs = {server = true},
 
 	func = function(name, param)
 
 		MUSICVOLUME = tonumber(param) or MUSICVOLUME
 
-		-- ability to stop music just as it begins
-		if MUSICVOLUME == 0 and playing[name].music then
+		-- ability to stop music by setting volume to 0
+		if MUSICVOLUME == 0 and playing[name].music
+		and playing[name].music >= 0 then
+
 			minetest.sound_stop(playing[name].music)
+
+			playing[name].music = -1
 		end
 
-		if MUSICVOLUME < 0.1 then MUSICVOLUME = 0.1 end
+		if MUSICVOLUME < 0 then MUSICVOLUME = 0 end
 		if MUSICVOLUME > 1.0 then MUSICVOLUME = 1.0 end
 
 		return true, "Music volume set to " .. MUSICVOLUME
