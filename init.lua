@@ -119,7 +119,10 @@ local get_ambience = function(player, tod, name)
 
 			-- reset music timer after 10 minutes
 			minetest.after(60 * 10, function(name)
-				playing[name].music = -1
+
+				if playing[name] then
+					playing[name].music = -1
+				end
 			end, name)
 		end
 
