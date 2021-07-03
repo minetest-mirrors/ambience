@@ -238,7 +238,7 @@ ambience.add_set("ice", {
 	frequency = 250,
 
 	sounds = {
-		{name = "icecrack", length = 23},
+		{name = "icecrack", length = 23, gain = 0.7},
 		{name = "desertwind", length = 8},
 		{name = "wind", length = 9}
 	},
