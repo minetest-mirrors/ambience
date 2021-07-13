@@ -104,7 +104,8 @@ end)
 local get_ambience = function(player, tod, name)
 
 	-- play server or local music if music enabled and music not already playing
-	if play_music and MUSICVOLUME > 0 and playing[name].music < 0 then
+	if play_music and MUSICVOLUME > 0
+	and playing[name] and playing[name].music < 0 then
 
 		-- count backwards
 		playing[name].music = playing[name].music -1
