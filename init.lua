@@ -134,13 +134,14 @@ local get_ambience = function(player, tod, name)
 	-- get foot and head level nodes at player position
 	local pos = player:get_pos() ; if not pos then return end
 	local prop = player:get_properties()
+	local eyeh = prop.eye_height or 1.47 -- eye level with fallback
 
-	pos.y = pos.y + prop.eye_height -- eye level
+	pos.y = pos.y + eyeh
 
 	local nod_head = pplus and name and playerplus[name]
 			and playerplus[name].nod_head or minetest.get_node(pos).name
 
-	pos.y = (pos.y - prop.eye_height) + 0.2 -- foot level
+	pos.y = (pos.y - eyeh) + 0.2 -- foot level
 
 	local nod_feet = pplus and name and playerplus[name]
 			and playerplus[name].nod_feet or minetest.get_node(pos).name
