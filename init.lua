@@ -91,12 +91,16 @@ end
 
 -- setup table when player joins
 minetest.register_on_joinplayer(function(player)
-	playing[player:get_player_name()] = {music = -1}
+	if player then
+		playing[player:get_player_name()] = {music = -1}
+	end
 end)
 
 -- remove table when player leaves
 minetest.register_on_leaveplayer(function(player)
-	playing[player:get_player_name()] = nil
+	if player then
+		playing[player:get_player_name()] = nil
+	end
 end)
 
 
@@ -197,7 +201,7 @@ minetest.register_globalstep(function(dtime)
 	local tod = minetest.get_timeofday()
 
 	-- loop through players
-	for _, player in ipairs(minetest.get_connected_players()) do
+	for _, player in pairs(minetest.get_connected_players()) do
 
 		player_name = player:get_player_name()
 
