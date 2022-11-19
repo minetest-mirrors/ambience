@@ -1,15 +1,17 @@
 
------------Sound Lic:
+Sound licenses:
+
 --Nightime Sound, Recorded by Mike Koenig, License: Attribution 3.0 http://soundbible.com/951-Nightime.html
+
 --Crickets At Night Sound, License: Attribution 3.0 | Recorded by Mike Koenig |http://soundbible.com/365-Crickets-At-Night.html
 
 --Medium Pack Of Wolves Howling, License: Public Domain | Recorded by fws.gov, http://soundbible.com/277-Medium-Pack-Of-Wolves-Howling.html
 
 --Horned Owl Sound, License: Attribution 3.0 | Recorded by Mike Koenig , http://soundbible.com/1851-Horned-Owl.html
+
 --Bats In Cave Sound, License: Attr-Noncommercial 3.0 | Recorded by Mike Koenig , http://soundbible.com/1939-Bats-In-Cave.html
 
 --Spooky Water Drops Sound, License: Attribution 3.0 | Recorded by Mike Koenig, http://soundbible.com/380-Spooky-Water-Drops.html
-
 
 -- Single Water Droplet Sound, License: Attribution 3.0 | Recorded by Mike Koenig, http://soundbible.com/384-Single-Water-Droplet.html
 
@@ -29,11 +31,7 @@
 
 --scuba1*.ogg- digifishmusic, Attribution License, http://www.freesound.org/people/digifishmusic/sounds/45521/
 
---Underwater Pool - Attribution 3.0 | Recorded by Mike Koenig, http://soundbible.com/1660-Underwater-Pool.html
-
 --dolphin_screaming - Creative Commons 0 License, felix.blume, http://www.freesound.org/people/felix.blume/sounds/161691/
-
---dolphins - Attribution Noncommercial License,  acclivity, http://www.freesound.org/people/acclivity/sounds/13691/
 
 ComboWind uses:
 --wind-in-the-trees -Attribution License, laurent, http://www.freesound.org/people/laurent/sounds/16995/
@@ -62,44 +60,9 @@ Rattlesnake Rattle, Public Domain, fws.gov,  http://soundbible.com/237-Rattlesna
 flying:
 crystal_airlines: Attribution License, suonho, http://www.freesound.org/people/suonho/sounds/56364/
 
-----------------Not used yet:
-desert:
+desert wind:
 Desert Simple.wav, Creative Commons 0 License, Proxima4, http://www.freesound.org/people/Proxima4/sounds/104320/
 
- 313hummer (Jordan Craige)  
---echos  http://soundcloud.com/jordan-craige/echos-1
-Creative Commons Attribution license (reuse allowed)  Attribution 3.0 Unported (CC BY 3.0)
-Not Used:--FoamOfTheSea http://soundcloud.com/jordan-craige/foam-of-the-sea
-
-xi-intersection:
-http://soundcloud.com/xi-intersection/mass-effect-uncharted-worlds  Creative Commons License
---not used:
-http://soundcloud.com/xi-intersection/donkey-kong-country-2-flight
-http://soundcloud.com/kogyo/kogyo-skalar-m1
-
-lava:
-http://www.freesound.org/people/Halion/sounds/17785/ (almost as good cc)  (combine with rocks falling?)
-http://www.freesound.org/people/pushtobreak/sounds/17823/ (attrib non cc really good)
-http://www.freesound.org/people/klankbeeld/sounds/123970/ (horror rhythm)
-Rockfall in mine.wav http://www.freesound.org/people/Benboncan/sounds/60085/
-
-
-http://www.freesound.org/people/snotch/sounds/96175/ (mud volcano)
-
---natural night sounds in Boquete.wav,  Attribution License, laurent, http://www.freesound.org/people/laurent/sounds/15851/
-http://www.freesound.org/people/Dynamicell/sounds/17553/
-http://www.freesound.org/people/juskiddink/sounds/78955/ aspen tree in wind
-http://www.freesound.org/people/Benboncan/sounds/69761/ wind in hedge birds animals
-
-
-ButterflyTea:
-Creative Commons : Attribution-Noncommercial-Share Alike 3.0
-http://www.jamendo.com/en/track/904012/dance-of-magical-flowers
-http://www.jamendo.com/en/track/904013/magic-of-the-seventh-world
-http://www.jamendo.com/en/track/904016/in-search-of-the-soul
-
 http://www.freesfx.co.uk/soundeffects/forests-jungles/
-
-zero-project
 
 icecrack.ogg by figowitz (http://freesound.org/people/Figowitz/sounds/67881/)
