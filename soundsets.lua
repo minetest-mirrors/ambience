@@ -40,7 +40,7 @@ ambience.add_set("splash", {
 	frequency = 1000,
 
 	sounds = {
-		{name = "swim_splashing", length = 3}
+		{name = "default_water_footstep", length = 2}
 	},
 
 	sound_check = function(def)
@@ -288,7 +288,8 @@ ambience.add_set("cave", {
 
 	sounds = {
 		{name = "drippingwater1", length = 1.5, ephemeral = true},
-		{name = "drippingwater2", length = 1.5, ephemeral = true}
+		{name = "drippingwater2", length = 1.5, ephemeral = true},
+		{name = "bats", length = 5, ephemeral = true}
 	},
 
 	sound_check = function(def)

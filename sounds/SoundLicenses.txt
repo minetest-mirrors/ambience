@@ -9,7 +9,7 @@ Sound licenses:
 
 --Horned Owl Sound, License: Attribution 3.0 | Recorded by Mike Koenig , http://soundbible.com/1851-Horned-Owl.html
 
---Bats In Cave Sound, License: Attr-Noncommercial 3.0 | Recorded by Mike Koenig , http://soundbible.com/1939-Bats-In-Cave.html
+--Bats In Cave Sound, License: CC0 | Recorded by SaloSensei , https://freesound.org/people/SaloSensei/sounds/616219/
 
 --Spooky Water Drops Sound, License: Attribution 3.0 | Recorded by Mike Koenig, http://soundbible.com/380-Spooky-Water-Drops.html
 
@@ -43,13 +43,11 @@ ComboWind uses:
 
 --Lake_Waves_2*, Attribution License, Benboncan, http://www.freesound.org/people/Benboncan/sounds/67884/
 
---water_swimming_splashing*, Attribution Noncommercial License, Robinhood76, http://www.freesound.org/people/Robinhood76/sounds/79657/
-
 --earth01a, Creative Commons 0 License., Halion , http://www.freesound.org/people/Halion/sounds/17785
 
 --fiji_beach, Creative Commons 0 License, c97059890, http://www.freesound.org/people/c97059890/sounds/21754/
 
---seagull, Attribution Noncommercial License., hazure,  http://www.freesound.org/people/hazure/sounds/23707/,
+--seagull, Attribution 3.0 License., hazure,  http://www.freesound.org/people/hazure/sounds/23707/,
 
 desert:
 coyote2, Attribution License, rogerforeman, http://www.freesound.org/people/rogerforeman/sounds/68068/
