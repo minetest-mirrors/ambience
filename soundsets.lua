@@ -139,7 +139,7 @@ ambience.add_set("lava", {
 })
 
 else
-	print ("[Ambience] found env_sounds, flowing water and lava sounds disabled.")
+	print ("[MOD] Ambience - found env_sounds, flowing water and lava sounds disabled.")
 end
 
 -- Only add fire sounds set if flame_sound is disabled or fire redo active
@@ -149,7 +149,7 @@ local fire_redo = minetest.get_modpath("fire") and fire.mod and fire.mod == "red
 
 if flame_sound and not fire_redo then
 
-	print ("[Ambience] fire sounds not enabled, already active in fire mod.")
+	print ("[MOD] Ambience - fire sounds not enabled, already active in fire mod.")
 
 else
 
