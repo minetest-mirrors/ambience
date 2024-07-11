@@ -139,7 +139,7 @@ ambience.add_set("lava", {
 })
 
 else
-	print ("[MOD] Ambience - found env_sounds, flowing water and lava sounds disabled.")
+	print ("[MOD] Ambience - found env_sounds, using for water and lava sounds.")
 end
 
 -- Only add fire sounds set if flame_sound is disabled or fire redo active
@@ -148,9 +148,7 @@ local flame_sound = minetest.settings:get_bool("flame_sound", true)
 local fire_redo = minetest.get_modpath("fire") and fire.mod and fire.mod == "redo"
 
 if flame_sound and not fire_redo then
-
 	print ("[MOD] Ambience - fire sounds not enabled, already active in fire mod.")
-
 else
 
 -- Small fire sound plays when near lower than 9 flames
@@ -440,3 +438,4 @@ ambience.add_set("high_up", {
 		end
 	end
 })
+

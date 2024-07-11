@@ -80,7 +80,7 @@ Additional Commands
 Two volume commands have been added to set sound and music volume:
 
 /svol (0.1 to 1.0)
-/mvol (0.1 to 1.0) -- 0 can be used to stop music from playing when it begins
+/mvol (0.1 to 1.0) -- 0 can be used to stop music curently playing
 
 
 Music
@@ -88,4 +88,5 @@ Music
 
 Music can be stored in the sounds folder either on server or locally and so long
 as it is named 'ambience_music.1', 'ambience_music.2' etc. then it will select
-a song randomly at midnight and play player.
+a song randomly to play every 20 minutes.
+
