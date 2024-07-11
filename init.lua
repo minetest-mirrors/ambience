@@ -166,6 +166,10 @@ local get_ambience = function(player, tod, name)
 
 		if set and set.sound_check then
 
+			-- get biome data
+			local bdata = minetest.get_biome_data(pos)
+			local biome = bdata and minetest.get_biome_name(bdata.biome) or ""
+
 			-- pass settings to function for condition check
 			local set_name, gain = set.sound_check({
 				player = player,
@@ -174,7 +178,8 @@ local get_ambience = function(player, tod, name)
 				totals = cn,
 				positions = ps,
 				head_node = nod_head,
-				feet_node = nod_feet
+				feet_node = nod_feet,
+				biome = biome
 			})
 
 			-- if conditions met return set name and gain value
