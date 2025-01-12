@@ -177,7 +177,7 @@ ambience.add_set("beach", {
 
 ambience.add_set("ice", {
 
-	frequency = 250,
+	frequency = 80,
 
 	sounds = {
 		{name = "icecrack", length = 5, gain = 1.1},
@@ -193,7 +193,7 @@ ambience.add_set("ice", {
 			+(def.totals["mcl_core:ice"] or 0)
 			+ (def.totals["mcl_core:packed_ice"] or 0)
 
-		if c > 100 then return "ice" end
+		if c > 400 then return "ice" end
 	end
 })
 
@@ -326,7 +326,7 @@ ambience.add_set("day", {
 		-- use handy function to count all nodes in group:leaves
 		local c = ambience.group_total(def.totals, "leaves")
 
-		if (def.tod > 0.2 and def.tod < 0.8) and def.pos.y > -10 and c > 5 then
+		if (def.tod > 0.2 and def.tod < 0.8) and def.pos.y > 0 and c > 50 then
 			return "day"
 		end
 	end
@@ -345,7 +345,8 @@ ambience.add_set("night", {
 		{name = "cricket", length = 6, ephemeral = true},
 		{name = "deer", length = 7, ephemeral = true},
 		{name = "frog", length = 1, ephemeral = true},
-		{name = "frog", length = 1, pitch = 1.2, ephemeral = true}
+		{name = "frog", length = 1, pitch = 1.2, ephemeral = true},
+		{name = "wind", length = 9}
 	},
 
 	sound_check = function(def)
@@ -353,7 +354,7 @@ ambience.add_set("night", {
 		-- use handy function to count all nodes in group:leaves
 		local c = ambience.group_total(def.totals, "leaves")
 
-		if (def.tod < 0.2 or def.tod > 0.8) and def.pos.y > -10 and c > 5 then
+		if (def.tod < 0.2 or def.tod > 0.8) and def.pos.y > 0 and c > 50 then
 			return "night"
 		end
 	end
