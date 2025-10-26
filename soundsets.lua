@@ -162,12 +162,14 @@ ambience.add_set("beach", {
 		{name = "beach_2", length = 6}
 	},
 
+	nodes = {"group:water"},
+
 	sound_check = function(def)
 
 		local c = (def.totals["default:water_source"] or 0)
 			+ (def.totals["mcl_core:water_source"] or 0)
 
-		if def.pos.y < 6 and def.pos.y > 0 and c > 150 then
+		if def.pos.y < 6 and def.pos.y > 0 and c > 130 then
 			return "beach"
 		end
 	end
