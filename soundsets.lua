@@ -11,6 +11,51 @@
 local mod_def = core.get_modpath("default")
 local mod_mcl = core.get_modpath("mcl_core")
 
+-- Big Splash jumping in water
+
+if core.settings:get_bool("ambience_water_splash") == true then
+
+	local in_water = {}
+
+	ambience.add_set("big_splash", {
+
+		frequency = 1000,
+
+		sounds = {
+			{name = "big_splash", gain = 0.3, length = 4, ephemeral = true}
+		},
+
+		sound_check = function(def)
+
+			local hdef = core.registered_nodes[def.head_node]
+			local fdef = core.registered_nodes[def.feet_node]
+			local name = def.player:get_player_name()
+			local vel
+
+			if core.has_feature("direct_velocity_on_players") then
+				vel = def.player:get_velocity()
+			else
+				vel = def.player:get_player_velocity()
+			end
+
+			if  hdef and hdef.groups and hdef.groups.water
+			and fdef and fdef.groups and fdef.groups.water then
+
+				if not in_water[name] and vel.y < -0.15 then
+					in_water[name] = 2
+					return "big_splash"
+				end
+			else
+				if fdef and fdef.groups and fdef.groups.water then
+					in_water[name] = 1
+				else
+					in_water[name] = nil
+				end
+			end
+		end
+	})
+end
+
 -- Underwater sounds play when player head is submerged
 
 ambience.add_set("underwater", {
