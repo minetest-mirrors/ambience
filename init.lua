@@ -225,7 +225,7 @@ core.register_globalstep(function(dtime)
 
 		pname = player:get_player_name()
 
-		if playing[pname] and playing[pname].timer > 0 then
+		if playing[pname] and playing[pname].timer and playing[pname].timer > 0 then
 
 			playing[pname].timer = playing[pname].timer - dtime
 
