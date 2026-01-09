@@ -59,6 +59,16 @@ Instead of counting each node total for things like leaves within the sound_chec
 local number = ambience.group_totals(def.totals, "leaves") -- count all group:leaves
 
 
+Adding sound to existing Set
+----------------------------
+
+ambience.add_to_set(set_name, sound_table)
+
+e.g.
+
+ambience.add_to_set("underwater", {name = "scuba", pitch = 1.2, length = 8})
+
+
 Getting Sound Set
 -----------------
 

@@ -59,6 +59,15 @@ function ambience.add_set(set_name, def)
 	end
 end
 
+-- add sound to existing set
+
+function ambience.add_to_set(set_name, def)
+
+	if not set_name or not def or not sound_sets[set_name] then return end
+
+	table.insert(sound_sets[set_name].sounds, def)
+end
+
 -- return set from list using name
 
 function ambience.get_set(set_name)
