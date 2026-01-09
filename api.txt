@@ -38,7 +38,7 @@ ambience.add_set("windy", {
 	frequency = 500,
 	nodes = {"default:sand"},
 	sounds = {
-		{name = "wind", length = 9, gain = 0.3},
+		{name = "wind", length = 9, gain = 0.3, fade = 1.0},
 		{name = "desertwind", length = 8, gain = 0.3},
 		{name = "crow", length = 3, ephemeral = true},
 	},

@@ -281,7 +281,7 @@ core.register_globalstep(function(dtime)
 			handler = core.sound_play(ambience.name, {
 				to_player = pname,
 				gain = ((ambience.gain or 0.3) + (MORE_GAIN or 0)) * playing[pname].svol,
-				pitch = ambience.pitch or 1.0
+				pitch = ambience.pitch or 1.0, fade = ambience.fade
 			}, ambience.ephemeral)
 
 --print ("playing... " .. ambience.name .. " (" .. chance .. " < "
