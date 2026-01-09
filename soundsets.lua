@@ -204,7 +204,7 @@ ambience.add_set("beach", {
 		{name = "seagull", length = 4.5, pitch = 1.2, ephemeral = true},
 		{name = "beach", length = 13},
 		{name = "gull", length = 1, ephemeral = true},
-		{name = "beach_2", length = 6}
+		{name = "seagull_2", length = 4, ephemeral = true}
 	},
 
 	nodes = {"group:water"},
@@ -307,7 +307,8 @@ ambience.add_set("jungle", {
 		{name = "canadianloon2", length = 14},
 		{name = "bird1", length = 11},
 		{name = "peacock", length = 2, ephemeral = true},
-		{name = "peacock", length = 2, pitch = 1.2, ephemeral = true}
+		{name = "peacock", length = 2, pitch = 1.2, ephemeral = true},
+		{name = "wooden_frog", length = 2, gain = 0.2, ephemeral = true}
 	},
 
 	nodes = {(mod_mcl and "mcl_trees:tree_jungle" or "default:jungletree")},
@@ -332,7 +333,8 @@ ambience.add_set("jungle_night", {
 		{name = "jungle_night_2", length = 4, ephemeral = true},
 		{name = "deer", length = 7, ephemeral = true},
 		{name = "frog", length = 1, ephemeral = true},
-		{name = "frog", length = 1, pitch = 1.3, ephemeral = true}
+		{name = "frog", length = 1, pitch = 1.3, ephemeral = true},
+		{name = "wooden_frog", length = 2, gain = 0.2, ephemeral = true}
 	},
 
 	sound_check = function(def)
