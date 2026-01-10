@@ -46,10 +46,10 @@ ambience.add_set("village", {
 		{"name = "village_background", gain = 0.5, fade = 1.0},
 	},
 	sounds = {
-		{name = "dogbark", gain = 0.4, ephemeral = true}, -- quick sound effect
-		{name = "talking_villagers", gain = 0.3}, -- stops when out of range
-		{name = "chicken", gain = 0.6, ephemeral = true},
-		{name = "chicken", gain = 0.6, pitch = 1.2, ephemeral = true},
+		{name = "dogbark", gain = 0.4, ephemeral = true, chance = 7}, -- quick sound effect
+		{name = "talking_villagers", gain = 0.3, chance = 3}, -- stops when out of range
+		{name = "chicken", gain = 0.6, ephemeral = true, chance = 5},
+		{name = "chicken", gain = 0.6, pitch = 1.2, ephemeral = true, chance = 5},
 	},
 	sound_check = function(def)
 		local number = def.totals["mymod:village_sound_block"] or 0
@@ -60,7 +60,7 @@ ambience.add_set("village", {
 })
 
 ambience.add_set("windy", {
-	frequency = 500,
+	frequency = 80,
 	nodes = {"default:sand"},
 	sounds = {
 		{name = "wind", length = 9, gain = 0.3, fade = 1.0}, -- fade in sound

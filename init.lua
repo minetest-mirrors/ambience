@@ -275,7 +275,7 @@ if ok and not playing[pname].bg and set_def and #set_def.background > 0 then
 			pitch = bg_amb.pitch, fade = bg_amb.fade, loop = true
 		})
 
---print("-- bg start", playing[pname].bg)
+--print("-- bg start", playing[pname].bg, set_name)
 
 		playing[pname].bg_set = set_name
 	end
@@ -321,6 +321,10 @@ end
 			number = random(#set_def.sounds) -- choose random sound from set
 			ambience = set_def.sounds[number] -- grab sound information
 
+-- selected sound chance of playing from a set
+
+if random((ambience.chance or 1)) == 1 then
+
 			-- play sound
 			handler = core.sound_play(ambience.name, {
 				to_player = pname,
@@ -330,7 +334,7 @@ end
 
 --print ("playing... " .. ambience.name .. " (" .. chance .. " < "
 --		.. sound_sets[set_name].frequency .. ") @ ", MORE_GAIN, handler)
-
+end
 			if handler then
 
 				-- set what player is currently listening to if handler found
