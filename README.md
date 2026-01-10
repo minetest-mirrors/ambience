@@ -24,5 +24,5 @@ Based on Immersive Sounds .36 mod by Neuromancer and optimized to run on servers
 - 1.9 - Tidy code, refactor music playing, add biome name to sound_check.
 - 2.0 - Add Mineclone support, add ethereal leaf check, remove minetest.after for custom timer, add Polish translation, tweak & tidy code.
 - 2.1 - Add ambience.group_total() function for easy counting of group: nodes inside a set.
-
+- 2.2 - Adds background sounds to sets that play looped in the background while normal sounds play on top (when conditions met).
 Code license: MIT
