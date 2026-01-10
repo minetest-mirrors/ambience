@@ -341,7 +341,7 @@ end
 				playing[pname].set = set_name
 				playing[pname].gain = MORE_GAIN
 				playing[pname].handler = handler
-				playing[pname].timer = ambience.length
+				playing[pname].timer = (ambience.length or 5)
 			end
 		end
 	end
