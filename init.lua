@@ -259,37 +259,36 @@ core.register_globalstep(function(dtime)
 
 		ok = playing[pname] -- everything starts off ok if player found
 
--- are we playing any available background sounds?
-if ok and not playing[pname].bg and set_def and #set_def.background > 0 then
+		-- are we playing any available background sounds?
+		if ok and not playing[pname].bg and set_def and #set_def.background > 0 then
 
-	-- choose a random sound from the background set
-	local bg_num = random(#set_def.background)
-	local bg_amb = set_def.background[bg_num]
+			-- choose a random sound from the background set
+			local bg_num = random(#set_def.background)
+			local bg_amb = set_def.background[bg_num]
 
-	-- only play sound if set differs from last one played
-	if set_name ~= playing[pname].bg_set then
+			-- only play sound if set differs from last one played
+			if set_name ~= playing[pname].bg_set then
 
-		playing[pname].bg = core.sound_play(bg_amb.name, {
-			to_player = pname,
-			gain = (bg_amb.gain or 0.3) * playing[pname].svol,
-			pitch = bg_amb.pitch, fade = bg_amb.fade, loop = true
-		})
+				playing[pname].bg = core.sound_play(bg_amb.name, {
+					to_player = pname,
+					gain = (bg_amb.gain or 0.3) * playing[pname].svol,
+					pitch = bg_amb.pitch, fade = bg_amb.fade, loop = true
+				})
 
 --print("-- bg start", playing[pname].bg, set_name)
 
-		playing[pname].bg_set = set_name
-	end
+				playing[pname].bg_set = set_name
+			end
 
-elseif ok and playing[pname].bg and set_name ~= playing[pname].bg_set then
+		elseif ok and playing[pname].bg and set_name ~= playing[pname].bg_set then
 
 --print("-- bg stop", playing[pname].bg, set_name, playing[pname].bg_set)
 
-	core.sound_stop(playing[pname].bg)
+			core.sound_stop(playing[pname].bg)
 
-	playing[pname].bg = nil
-	playing[pname].bg_set = nil
-end
--------
+			playing[pname].bg = nil
+			playing[pname].bg_set = nil
+		end
 
 		-- are we playing something already?
 		if ok and playing[pname].handler then
@@ -321,20 +320,20 @@ end
 			number = random(#set_def.sounds) -- choose random sound from set
 			ambience = set_def.sounds[number] -- grab sound information
 
--- selected sound chance of playing from a set
+			-- selected sound chance of playing from a set
+			if random((ambience.chance or 1)) == 1 then
 
-if random((ambience.chance or 1)) == 1 then
-
-			-- play sound
-			handler = core.sound_play(ambience.name, {
-				to_player = pname,
-				gain = ((ambience.gain or 0.3) + (MORE_GAIN or 0)) * playing[pname].svol,
-				pitch = ambience.pitch or 1.0, fade = ambience.fade
-			}, ambience.ephemeral)
+				-- play sound
+				handler = core.sound_play(ambience.name, {
+					to_player = pname,
+					gain = ((ambience.gain or 0.3) + (MORE_GAIN or 0)) * playing[pname].svol,
+					pitch = ambience.pitch or 1.0, fade = ambience.fade
+				}, ambience.ephemeral)
 
 --print ("playing... " .. ambience.name .. " (" .. chance .. " < "
 --		.. sound_sets[set_name].frequency .. ") @ ", MORE_GAIN, handler)
-end
+			end
+
 			if handler then
 
 				-- set what player is currently listening to if handler found

@@ -62,14 +62,15 @@ ambience.add_set("underwater", {
 
 	frequency = 1000,
 
-	background = {
-		{name = "scuba", length = 8},
-		{name = "scuba", pitch = 1.2, length = 8}
-	},
-
---	sounds = {
---		{name = "scuba", length = 8}
+-- This is an example of how it could be used as a background sound also
+--	background = {
+--		{name = "scuba", length = 8},
+--		{name = "scuba", pitch = 1.2, length = 8}
 --	},
+
+	sounds = {
+		{name = "scuba", length = 8}
+	},
 
 	sound_check = function(def)
 
@@ -83,7 +84,7 @@ ambience.add_set("underwater", {
 
 -- add new sound to above set
 
---ambience.add_to_set("underwater", {name = "scuba", pitch = 1.2, length = 8})
+ambience.add_to_set("underwater", {name = "scuba", pitch = 1.2, length = 8})
 
 -- Splashing sound plays when player walks inside water nodes (if enabled)
 
