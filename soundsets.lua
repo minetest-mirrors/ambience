@@ -41,10 +41,14 @@ if core.settings:get_bool("ambience_water_splash") == true then
 			if  hdef and hdef.groups and hdef.groups.water
 			and fdef and fdef.groups and fdef.groups.water then
 
-				if not in_water[name] and vel.y < -0.15 then
+				if not in_water[name] and vel.y < -0.166 then
+
 					in_water[name] = 2
+
 					return "big_splash"
 				end
+
+				in_water[name] = 2
 			else
 				if fdef and fdef.groups and fdef.groups.water then
 					in_water[name] = 1
