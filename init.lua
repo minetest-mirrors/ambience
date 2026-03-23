@@ -168,7 +168,7 @@ local function get_ambience(player, tod, name)
 		end
 
 		-- after 5 minutes (a normal song length) reset music timers
-		if playing[name].music > 300 then
+		if playing[name].music_handler and playing[name].music > 300 then
 			playing[name].music = 0
 			playing[name].music_handler = nil
 --print("--- resetting music timers")
