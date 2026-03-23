@@ -7,8 +7,7 @@ ambience = {}
 
 local SOUNDVOLUME = 1.0
 local MUSICVOLUME = 0.6
-local MUSICINTERVAL = 60 * 20
-local play_music = core.settings:get_bool("ambience_music") ~= false
+local MUSICINTERVAL = tonumber(core.settings:get("ambience_music_interval")) or (60 * 20)
 local radius = 6
 local playing = {} -- user settings, timers and current set playing
 local sound_sets = {} -- all the sounds and their settings
@@ -18,7 +17,17 @@ local set_nodes = {} -- all the nodes needed for sets
 -- translation and local
 
 local S = core.get_translator("ambience")
+local get_id = core.get_node_raw
+local get_id_name = core.get_name_from_content_id
 local get_node = core.get_node
+
+if get_id then get_node = function(pos)
+
+		local id, p1, p2, pos_ok = get_id(pos.x, pos.y, pos.z)
+
+		return {name = get_id_name(id), param1 = p1, param2 = p2, loaded = pos_ok}
+	end
+end
 
 -- add set to list
 
@@ -134,7 +143,6 @@ end)
 -- remove table when player leaves
 
 core.register_on_leaveplayer(function(player)
-
 	if player then playing[player:get_player_name()] = nil end
 end)
 
@@ -143,13 +151,13 @@ end)
 local function get_ambience(player, tod, name)
 
 	-- if enabled and not already playing, play local/server music on interval check
-	if play_music and playing[name] and playing[name].mvol > 0 then
+	if MUSICINTERVAL > 0 and playing[name] and playing[name].mvol > 0 then
 
 		-- increase music time interval
 		playing[name].music = playing[name].music + 1
 
 		-- play music on interval check
-		if playing[name].music > MUSICINTERVAL and playing[name].music_handler == nil then
+		if playing[name].music > MUSICINTERVAL and not playing[name].music_handler then
 
 			playing[name].music_handler = core.sound_play("ambience_music", {
 				to_player = name,
@@ -157,6 +165,13 @@ local function get_ambience(player, tod, name)
 			})
 
 			playing[name].music = 0 -- reset interval
+		end
+
+		-- after 5 minutes (a normal song length) reset music timers
+		if playing[name].music > 300 then
+			playing[name].music = 0
+			playing[name].music_handler = nil
+--print("--- resetting music timers")
 		end
 --print("-- music timer", playing[name].music .. "/" .. MUSICINTERVAL)
 	end
@@ -314,7 +329,7 @@ core.register_globalstep(function(dtime)
 		-- set random chance
 		chance = random(1000)
 
-		-- if chance is lower than set frequency then select set
+		-- if chance is lower than set frequency then use set
 		if ok and set_name and chance < set_def.frequency
 		and set_def.sounds and #set_def.sounds > 0 then
 
