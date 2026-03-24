@@ -15,7 +15,15 @@ local mod_mcl = core.get_modpath("mcl_core")
 
 if core.settings:get_bool("ambience_water_splash") == true then
 
-	local in_water = {}
+	local players = {}
+
+	core.register_on_joinplayer(function(player)
+		players[player:get_player_name()] = {in_water = nil, old_pos = -31000}
+	end)
+
+	core.register_on_leaveplayer(function(player)
+		players[player:get_player_name()] = nil
+	end)
 
 	ambience.add_set("big_splash", {
 
@@ -30,31 +38,28 @@ if core.settings:get_bool("ambience_water_splash") == true then
 			local hdef = core.registered_nodes[def.head_node]
 			local fdef = core.registered_nodes[def.feet_node]
 			local name = def.player:get_player_name()
-			local vel
-
-			if core.has_feature("direct_velocity_on_players") then
-				vel = def.player:get_velocity()
-			else
-				vel = def.player:get_player_velocity()
-			end
 
 			if hdef and hdef.groups.water and fdef and fdef.groups.water then
 
-				if not in_water[name] and vel.y < -0.166 then
+				local diff = players[name].old_pos - def.pos.y
 
-					in_water[name] = 2
+				if not players[name].in_water and diff > 1 then
+
+					players[name].in_water = 2
 
 					return "big_splash"
 				end
 
-				in_water[name] = 2
+				players[name].in_water = 2
 			else
 				if fdef and fdef.groups.water then
-					in_water[name] = 1
+					players[name].in_water = 1
 				else
-					in_water[name] = nil
+					players[name].in_water = nil
 				end
 			end
+
+			players[name].old_pos = def.pos.y
 		end
 	})
 end
