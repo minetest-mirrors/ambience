@@ -30,7 +30,9 @@ if core.settings:get_bool("ambience_water_splash") == true then
 		frequency = 1000,
 
 		sounds = {
-			{name = "big_splash", gain = 0.3, length = 4, ephemeral = true}
+			{name = "big_splash", gain = 0.3, length = 4, ephemeral = true},
+			{name = "big_splash", gain = 0.3, length = 4, ephemeral = true, pitch = 0.9},
+			{name = "big_splash", gain = 0.3, length = 4, ephemeral = true, pitch = 1.1}
 		},
 
 		sound_check = function(def)
