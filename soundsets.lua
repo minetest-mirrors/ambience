@@ -393,7 +393,7 @@ ambience.add_set("day", {
 		-- use handy function to count all nodes in group:leaves
 		local c = ambience.group_total(def.totals, "leaves")
 
-		if def.tod > 0.2 and def.tod < 0.8 and def.pos.y > 0 and c > 50 then
+		if (def.tod > 0.2 and def.tod < 0.8) and def.pos.y > 0 and c > 50 then
 			return "day"
 		end
 	end
@@ -421,7 +421,7 @@ ambience.add_set("night", {
 		-- use handy function to count all nodes in group:leaves
 		local c = ambience.group_total(def.totals, "leaves")
 
-		if def.tod < 0.2 or def.tod > 0.8 and def.pos.y > 0 and c > 50 then
+		if (def.tod < 0.2 or def.tod > 0.8) and def.pos.y > 0 and c > 50 then
 			return "night"
 		end
 	end
