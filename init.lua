@@ -209,8 +209,6 @@ local function get_ambience(player, tod, name)
 			if set_name then return set_name, gain end
 		end
 	end
-
-	return nil, nil
 end
 
 -- players routine
@@ -264,8 +262,7 @@ core.register_globalstep(function(dtime)
 		if ok and not p.bg and set_def and #set_def.background > 0 then
 
 			-- choose a random sound from the background set
-			local bg_num = random(#set_def.background)
-			local bg_amb = set_def.background[bg_num]
+			local bg_amb = set_def.background[random(#set_def.background)]
 
 			-- only play sound if set differs from last one played
 			if set_name ~= p.bg_set then
