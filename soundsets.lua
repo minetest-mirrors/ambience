@@ -213,18 +213,22 @@ else
 	print ("[MOD] Ambience - Using env_sounds for water and lava sounds.")
 end
 
--- Beach sounds play when pos above 0 and below 6 and 150+ water source found
+-- Beach sounds play when pos above 0 and below 6 and 100+ water source found
 
 ambience.add_set("beach", {
 
 	frequency = 40,
 
-	sounds = {
-		{name = "seagull", length = 4.5, ephemeral = true},
-		{name = "seagull", length = 4.5, pitch = 1.2, ephemeral = true},
+	background = {
 		{name = "beach", length = 13},
-		{name = "gull", length = 1, ephemeral = true},
-		{name = "seagull_2", length = 4, ephemeral = true}
+	},
+
+	sounds = {
+		{name = "seagull", length = 4.5, ephemeral = true, chance = 2},
+		{name = "seagull", length = 4.5, pitch = 1.2, ephemeral = true, chance = 2},
+		--{name = "beach", length = 13},
+		{name = "gull", length = 1, ephemeral = true, chance = 2},
+		{name = "seagull_2", length = 4, ephemeral = true, chance = 2}
 	},
 
 	nodes = {"group:water"},
@@ -234,7 +238,7 @@ ambience.add_set("beach", {
 		local c = (def.totals["default:water_source"] or 0)
 			+ (def.totals["mcl_core:water_source"] or 0)
 
-		if def.pos.y > 0 and def.pos.y < 6 and c > 130 then
+		if def.pos.y > 0 and def.pos.y < 6 and c > 100 then
 			return "beach"
 		end
 	end

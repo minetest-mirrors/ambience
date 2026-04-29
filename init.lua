@@ -258,7 +258,7 @@ core.register_globalstep(function(dtime)
 		local p = playing[pname]
 		local set_name, MORE_GAIN = get_ambience(player, tod, pname)
 		local set_def = sound_sets[set_name]
-		local ok = p -- everything starts off ok if player found
+		local ok = p and true -- everything starts off ok if player found
 
 		-- are we playing any available background sounds?
 		if ok and not p.bg and set_def and #set_def.background > 0 then
