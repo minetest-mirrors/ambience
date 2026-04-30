@@ -15,6 +15,7 @@ local set_nodes = {} -- all the nodes needed for sets
 -- translation and local
 
 local S = core.get_translator("ambience")
+local random = math.random
 local get_id = core.get_node_raw
 local get_id_name = core.get_name_from_content_id
 local get_node = core.get_node
@@ -36,6 +37,7 @@ function ambience.add_set(set_name, def)
 	sound_sets[set_name] = {
 		frequency = def.frequency or 50,
 		background = def.background or {},
+		music = def.music or {},
 		sounds = def.sounds or {},
 		sound_check = def.sound_check,
 		nodes = def.nodes
@@ -157,8 +159,20 @@ local function get_ambience(player, tod, name)
 		-- if not already playing, play music on interval check
 		if p.music > MUSICINTERVAL and not p.music_handler then
 
-			p.music_handler = core.sound_play("ambience_music",
-					{to_player = name, gain = p.mvol})
+			local song = "ambience_music" -- default
+
+			-- if set has a music list select at random to replace default
+			if p.music_list and #p.music_list > 0 then
+
+				local select = p.music_list[random(#p.music_list)]
+
+				if random((select.chance or 1)) == 1 then
+					song = select.name
+				end
+			end
+
+			p.music_handler = core.sound_play(
+					song, {to_player = name, gain = p.mvol})
 
 			p.music = 0 -- reset interval
 
@@ -214,7 +228,6 @@ end
 -- players routine
 
 local timer = 0
-local random = math.random
 
 core.register_globalstep(function(dtime)
 
@@ -257,6 +270,9 @@ core.register_globalstep(function(dtime)
 		local set_name, MORE_GAIN = get_ambience(player, tod, pname)
 		local set_def = sound_sets[set_name]
 		local ok = p and true -- everything starts off ok if player found
+
+		-- store any set music found for later use
+		p.music_list = set_def and set_def.music
 
 		-- are we playing any available background sounds?
 		if ok and not p.bg and set_def and #set_def.background > 0 then
@@ -304,7 +320,7 @@ core.register_globalstep(function(dtime)
 
 		local chance = random(1000)
 
-		-- if chance is lower than set frequency then use set
+		-- if chance is lower than frequency then use set
 		if ok and set_name and chance < set_def.frequency
 		and set_def.sounds and #set_def.sounds > 0 then
 

@@ -215,20 +215,22 @@ end
 
 -- Beach sounds play when pos above 0 and below 6 and 100+ water source found
 
+local water_level = tonumber(core.settings:get("water_level"))
+
 ambience.add_set("beach", {
+
+	background = {
+		{name = "beach", length = 13, fade = 0.2}, -- length isnt needed, just info here
+	},
 
 	frequency = 40,
 
-	background = {
-		{name = "beach", length = 13},
-	},
-
 	sounds = {
-		{name = "seagull", length = 4.5, ephemeral = true, chance = 2},
-		{name = "seagull", length = 4.5, pitch = 1.2, ephemeral = true, chance = 2},
+		{name = "seagull", length = 4.5, ephemeral = true},
+		{name = "seagull", length = 4.5, pitch = 1.2, ephemeral = true},
 		--{name = "beach", length = 13},
-		{name = "gull", length = 1, ephemeral = true, chance = 2},
-		{name = "seagull_2", length = 4, ephemeral = true, chance = 2}
+		{name = "gull", length = 1, ephemeral = true},
+		{name = "seagull_2", length = 4, ephemeral = true}
 	},
 
 	nodes = {"group:water"},
@@ -238,7 +240,7 @@ ambience.add_set("beach", {
 		local c = (def.totals["default:water_source"] or 0)
 			+ (def.totals["mcl_core:water_source"] or 0)
 
-		if def.pos.y > 0 and def.pos.y < 6 and c > 100 then
+		if def.pos.y > water_level - 1 and def.pos.y < water_level + 5 and c > 100 then
 			return "beach"
 		end
 	end
@@ -342,7 +344,9 @@ ambience.add_set("jungle", {
 		local c = (def.totals["default:jungletree"] or 0)
 			+ (def.totals["mcl_trees:tree_jungle"] or 0)
 
-		if def.tod > 0.2 and def.tod < 0.8 and c > 79 then return "jungle" end
+		if def.pos.y > 0 and def.tod > 0.2 and def.tod < 0.8 and c > 79 then
+			return "jungle"
+		end
 	end
 })
 
@@ -367,7 +371,9 @@ ambience.add_set("jungle_night", {
 		local c = (def.totals["default:jungletree"] or 0)
 			+ (def.totals["mcl_trees:tree_jungle"] or 0)
 
-		if (def.tod < 0.2 or def.tod > 0.8) and c > 79 then return "jungle_night" end
+		if def.pos.y > 0 and (def.tod < 0.2 or def.tod > 0.8) and c > 79 then
+			return "jungle_night"
+		end
 	end
 })
 
