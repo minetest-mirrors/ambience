@@ -103,22 +103,20 @@ end
 
 -- return node total belonging to a specific group:
 
-function ambience.group_total(ntab, ngrp)
+function ambience.group_total(nodelist, nodegroup)
 
-	local tot = 0
-	local def, grp
+	local total, def = 0
 
-	for _,n in pairs(ntab) do
+	for node, num in pairs(nodelist) do
 
-		def = core.registered_nodes[_]
-		grp = def and def.groups and def.groups[ngrp]
+		def = core.registered_nodes[node]
 
-		if grp and grp > 0 then
-			tot = tot + n
+		if def and def.groups[nodegroup] then
+			total = total + num
 		end
 	end
 
-	return tot
+	return total
 end
 
 -- setup table when player joins
@@ -146,9 +144,9 @@ end)
 
 -- plays music and selects sound set
 
-local function get_ambience(player, tod, name)
+local function get_ambience(player, tod, pname)
 
-	local p = playing[name]
+	local p = playing[pname]
 
 	-- if enabled, play local/server music on interval check
 	if MUSICINTERVAL > 0 and p and p.mvol > 0 then
@@ -161,19 +159,18 @@ local function get_ambience(player, tod, name)
 
 			local song = "ambience_music" -- default
 
-			-- if set has a music list select at random to replace default
+			-- if set contains a music list then select a song at random
 			if p.music_list and #p.music_list > 0 then
 
 				local select = p.music_list[random(#p.music_list)]
 
+				-- if song chance met, replace default music
 				if random((select.chance or 1)) == 1 then
 					song = select.name
 				end
 			end
 
-			p.music_handler = core.sound_play(
-					song, {to_player = name, gain = p.mvol})
-
+			p.music_handler = core.sound_play(song, {to_player = pname, gain = p.mvol})
 			p.music = 0 -- reset interval
 
 		-- after 5 minutes (a normal song length) reset music timers
@@ -182,7 +179,7 @@ local function get_ambience(player, tod, name)
 			p.music = 0 ; p.music_handler = nil
 --print("--- resetting music timers")
 		end
---print("-- music timer", playing[name].music .. "/" .. MUSICINTERVAL)
+--print("-- music timer", p.music .. "/" .. MUSICINTERVAL)
 	end
 
 	-- get foot and head level nodes at player position
@@ -324,7 +321,7 @@ core.register_globalstep(function(dtime)
 		if ok and set_name and chance < set_def.frequency
 		and set_def.sounds and #set_def.sounds > 0 then
 
-			local amb = set_def.sounds[random(#set_def.sounds)] -- choose random set
+			local amb = set_def.sounds[random(#set_def.sounds)] -- choose random sound
 
 			-- selected sound chance of playing from a set
 			if random((amb.chance or 1)) == 1 then
@@ -383,13 +380,14 @@ core.register_chatcommand("mvol", {
 	func = function(name, param)
 
 		local mvol = tonumber(param) or playing[name].mvol
+		local p = playing[name]
 
 		-- stop music currently playing by setting volume to 0
-		if mvol == 0 and playing[name].music_handler then
+		if mvol == 0 and p.music_handler then
 
-			core.sound_stop(playing[name].music_handler)
+			core.sound_stop(p.music_handler)
 
-			playing[name].music_handler = nil
+			p.music_handler = nil
 
 			core.chat_send_player(name, S("Music stopped!"))
 		end
@@ -402,7 +400,7 @@ core.register_chatcommand("mvol", {
 
 		meta:set_string("ambience.mvol", mvol)
 
-		playing[name].mvol = mvol
+		p.mvol = mvol
 
 		return true, S("Music volume set to @1", mvol)
 	end
