@@ -240,7 +240,7 @@ ambience.add_set("beach", {
 		local c = (def.totals["default:water_source"] or 0)
 			+ (def.totals["mcl_core:water_source"] or 0)
 
-		if def.pos.y > water_level - 1 and def.pos.y < water_level + 5 and c > 100 then
+		if def.pos.y > water_level - 1 and def.pos.y < water_level + 4 and c > 100 then
 			return "beach"
 		end
 	end
