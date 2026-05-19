@@ -226,11 +226,11 @@ ambience.add_set("beach", {
 	frequency = 40,
 
 	sounds = {
-		{name = "seagull", length = 4.5, ephemeral = true},
-		{name = "seagull", length = 4.5, pitch = 1.2, ephemeral = true},
+		{name = "seagull", length = 4.5, chance = 2, ephemeral = true},
+		{name = "seagull", length = 4.5, pitch = 1.2, chance = 2, ephemeral = true},
 		--{name = "beach", length = 13},
-		{name = "gull", length = 1, ephemeral = true},
-		{name = "seagull_2", length = 4, ephemeral = true}
+		{name = "gull", length = 1, chance = 2, ephemeral = true},
+		{name = "seagull_2", length = 4, chance = 2, ephemeral = true}
 	},
 
 	nodes = {"group:water"},
