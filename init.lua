@@ -185,8 +185,6 @@ local function get_ambience(player, tod, pname)
 	-- get foot and head level nodes at player position
 	local pos = player:get_pos() ; if not pos then return end
 	local eyeh = player:get_properties().eye_height or 1.47 -- eye level with fallback
-	local nod_head = get_node({x = pos.x, y = pos.y + eyeh, z = pos.z}).name
-	local nod_feet = get_node({x = pos.x, y = pos.y + 0.2, z = pos.z}).name
 
 	-- get all set nodes around player
 	local ps, cn = core.find_nodes_in_area(
@@ -195,26 +193,28 @@ local function get_ambience(player, tod, pname)
 
 	-- get biome data
 	local bdata = core.get_biome_data(pos)
-	local biome = bdata and core.get_biome_name(bdata.biome) or ""
 
-	-- loop through sets in order and choose first that meets conditions set
+	-- prepare check data
+	local data = {
+		player = player,
+		pos = pos,
+		tod = tod,
+		head_node = get_node({x = pos.x, y = pos.y + eyeh, z = pos.z}).name,
+		feet_node = get_node({x = pos.x, y = pos.y + 0.2, z = pos.z}).name,
+		totals = cn,
+		positions = ps,
+		biome = bdata and core.get_biome_name(bdata.biome) or ""
+	}
+
+	-- loop through sets in order and choose first that has its conditions met
 	for n = 1, #sound_set_order do
 
 		local set = sound_sets[ sound_set_order[n] ]
 
 		if set and set.sound_check then
 
-			-- pass settings to set function for condition check
-			local set_name, gain = set.sound_check({
-				player = player,
-				pos = pos,
-				tod = tod,
-				totals = cn,
-				positions = ps,
-				head_node = nod_head,
-				feet_node = nod_feet,
-				biome = biome
-			})
+			-- pass data to set function for condition check
+			local set_name, gain = set.sound_check(data)
 
 			-- if conditions met return set name and gain value
 			if set_name then return set_name, gain end
