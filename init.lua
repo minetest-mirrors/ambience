@@ -123,23 +123,20 @@ end
 
 core.register_on_joinplayer(function(player)
 
-	if player then
+	local name = player:get_player_name()
+	local meta = player:get_meta()
 
-		local name = player:get_player_name()
-		local meta = player:get_meta()
-
-		playing[name] = {
-			mvol = tonumber(meta:get_string("ambience.mvol")) or MUSICVOLUME,
-			svol = tonumber(meta:get_string("ambience.svol")) or SOUNDVOLUME,
-			timer = 0, music = 0, music_handler = nil, set = "nil"
-		}
-	end
+	playing[name] = {
+		mvol = tonumber(meta:get_string("ambience.mvol")) or MUSICVOLUME,
+		svol = tonumber(meta:get_string("ambience.svol")) or SOUNDVOLUME,
+		timer = 0, music = 0, music_handler = nil, set = "nil"
+	}
 end)
 
 -- remove table when player leaves
 
 core.register_on_leaveplayer(function(player)
-	if player then playing[player:get_player_name()] = nil end
+	playing[player:get_player_name()] = nil
 end)
 
 -- plays music and selects sound set
@@ -229,11 +226,12 @@ local timer = 0
 core.register_globalstep(function(dtime)
 
 	local players = core.get_connected_players()
-	local pname
+	local player, pname
 
 	-- reduce sound timer for each player and stop/reset when needed
-	for _, player in pairs(players) do
+	for num = 1, #players do
 
+		player = players[num]
 		pname = player:get_player_name()
 
 		local p = playing[pname]
@@ -259,8 +257,9 @@ core.register_globalstep(function(dtime)
 	local tod = core.get_timeofday()
 
 	-- loop through players
-	for _, player in pairs(players) do
+	for num = 1, #players do
 
+		player = players[num]
 		pname = player:get_player_name()
 
 		local p = playing[pname]
@@ -274,11 +273,11 @@ core.register_globalstep(function(dtime)
 		-- are we playing any available background sounds?
 		if ok and not p.bg and set_def and #set_def.background > 0 then
 
-			-- choose a random sound from the background set
-			local bg_amb = set_def.background[random(#set_def.background)]
-
-			-- only play sound if set differs from last one played
+			-- only play if set differs from last one played
 			if set_name ~= p.bg_set then
+
+				-- choose a random sound from the background set
+				local bg_amb = set_def.background[random(#set_def.background)]
 
 				p.bg = core.sound_play(bg_amb.name, {
 					to_player = pname,
