@@ -141,12 +141,14 @@ end)
 
 -- plays music and selects sound set
 
+local data = {} -- save recreating table for each time
+
 local function get_ambience(player, tod, pname)
 
-	local p = playing[pname]
+	local p = playing[pname] ; if not p then return end
 
 	-- if enabled, play local/server music on interval check
-	if MUSICINTERVAL > 0 and p and p.mvol > 0 then
+	if MUSICINTERVAL > 0 and p.mvol > 0 then
 
 		-- increase music time interval
 		p.music = p.music + 1
@@ -181,7 +183,11 @@ local function get_ambience(player, tod, pname)
 
 	-- get foot and head level nodes at player position
 	local pos = player:get_pos() ; if not pos then return end
-	local eyeh = player:get_properties().eye_height or 1.47 -- eye level with fallback
+
+	-- save having to get eye level from player properties table each time
+	if not p.eyeh then
+		p.eyeh = player:get_properties().eye_height or 1.47
+	end
 
 	-- get all set nodes around player
 	local ps, cn = core.find_nodes_in_area(
@@ -191,17 +197,15 @@ local function get_ambience(player, tod, pname)
 	-- get biome data
 	local bdata = core.get_biome_data(pos)
 
-	-- prepare check data
-	local data = {
-		player = player,
-		pos = pos,
-		tod = tod,
-		head_node = get_node({x = pos.x, y = pos.y + eyeh, z = pos.z}).name,
-		feet_node = get_node({x = pos.x, y = pos.y + 0.2, z = pos.z}).name,
-		totals = cn,
-		positions = ps,
-		biome = bdata and core.get_biome_name(bdata.biome) or ""
-	}
+	-- fill check table
+	data.player = player
+	data.pos = pos
+	data.tod = tod
+	data.head_node = get_node({x = pos.x, y = pos.y + p.eyeh, z = pos.z}).name
+	data.feet_node = get_node({x = pos.x, y = pos.y + 0.2, z = pos.z}).name
+	data.totals = cn
+	data.positions = ps
+	data.biome = bdata and core.get_biome_name(bdata.biome) or ""
 
 	-- loop through sets in order and choose first that has its conditions met
 	for n = 1, #sound_set_order do
@@ -228,6 +232,17 @@ core.register_globalstep(function(dtime)
 	local players = core.get_connected_players()
 	local player, pname
 
+	timer = timer + dtime
+
+	local timer1sec
+	local tod
+
+	if timer >= 1 then
+		timer = 0
+		timer1sec = true
+		tod = core.get_timeofday()
+	end
+
 	-- reduce sound timer for each player and stop/reset when needed
 	for num = 1, #players do
 
@@ -249,99 +264,91 @@ core.register_globalstep(function(dtime)
 				p.set = nil ; p.gain = nil ; p.handler = nil
 			end
 		end
-	end
 
-	-- one second timer
-	timer = timer + dtime ; if timer < 1 then return end ; timer = 0
+		-- one second timer actions
+		if timer1sec and p then
 
-	local tod = core.get_timeofday()
+			local set_name, MORE_GAIN = get_ambience(player, tod, pname)
+			local set_def = sound_sets[set_name]
 
-	-- loop through players
-	for num = 1, #players do
+			-- store any set music found for later use
+			p.music_list = set_def and set_def.music
 
-		player = players[num]
-		pname = player:get_player_name()
+			-- are we playing any available background sounds?
+			if not p.bg and set_def and #set_def.background > 0 then
 
-		local p = playing[pname]
-		local set_name, MORE_GAIN = get_ambience(player, tod, pname)
-		local set_def = sound_sets[set_name]
-		local ok = p and true -- everything starts off ok if player found
+				-- only play if set differs from last one played
+				if set_name ~= p.bg_set then
 
-		-- store any set music found for later use
-		p.music_list = set_def and set_def.music
+					-- choose a random sound from the background set
+					local bg_amb = set_def.background[random(#set_def.background)]
 
-		-- are we playing any available background sounds?
-		if ok and not p.bg and set_def and #set_def.background > 0 then
-
-			-- only play if set differs from last one played
-			if set_name ~= p.bg_set then
-
-				-- choose a random sound from the background set
-				local bg_amb = set_def.background[random(#set_def.background)]
-
-				p.bg = core.sound_play(bg_amb.name, {
-					to_player = pname,
-					gain = (bg_amb.gain or 0.3) * p.svol,
-					pitch = bg_amb.pitch, fade = bg_amb.fade, loop = true
-				})
+					p.bg = core.sound_play(bg_amb.name, {
+						to_player = pname,
+						gain = (bg_amb.gain or 0.3) * p.svol,
+						pitch = bg_amb.pitch, fade = bg_amb.fade, loop = true
+					})
 
 --print("-- bg start", p.bg, set_name)
 
-				p.bg_set = set_name
-			end
+					p.bg_set = set_name
+				end
 
-		elseif ok and p.bg and set_name ~= p.bg_set then
+			elseif p.bg and set_name ~= p.bg_set then
 
 --print("-- bg stop", p.bg, set_name, p.bg_set)
 
-			core.sound_stop(p.bg)
+				core.sound_stop(p.bg)
 
-			p.bg = nil ; p.bg_set = nil
-		end
+				p.bg = nil ; p.bg_set = nil
+			end
 
-		if ok and p.handler then -- are we playing something already?
+			local can_play = true
 
-			-- stop current sound if another set active or gain changed
-			if p.set ~= set_name or p.gain ~= MORE_GAIN then
+			if p.handler then -- are we playing something already?
+
+				-- stop current sound if another set active or gain changed
+				if p.set ~= set_name or p.gain ~= MORE_GAIN then
 
 --print ("-- change stop", set_name, p.handler)
 
-				core.sound_stop(p.handler)
+					core.sound_stop(p.handler)
 
-				p.set = nil ; p.gain = nil ; p.handler = nil ; p.timer = 0
-			else
-				ok = false -- sound set still playing, skip new sound
+					p.set = nil ; p.gain = nil ; p.handler = nil ; p.timer = 0
+				else
+					can_play = false -- sound set still playing, skip new sound
+				end
 			end
-		end
 
-		local chance = random(1000)
+			local chance = random(1000)
 
-		-- if chance is lower than frequency then use set
-		if ok and set_name and chance < set_def.frequency
-		and set_def.sounds and #set_def.sounds > 0 then
+			-- if chance is lower than frequency then use set
+			if can_play and set_name and chance < set_def.frequency
+			and set_def.sounds and #set_def.sounds > 0 then
 
-			local amb = set_def.sounds[random(#set_def.sounds)] -- choose random sound
+				local amb = set_def.sounds[random(#set_def.sounds)] -- choose random sound
 
-			-- selected sound chance of playing from a set
-			if random((amb.chance or 1)) == 1 then
+				-- selected sound chance of playing from a set
+				if random(amb.chance or 1) == 1 then
 
-				-- play sound
-				p.handler = core.sound_play(amb.name, {
-					to_player = pname,
-					gain = ((amb.gain or 0.3) + (MORE_GAIN or 0)) * p.svol,
-					pitch = amb.pitch or 1.0, fade = amb.fade
-				}, amb.ephemeral)
+					-- play sound
+					p.handler = core.sound_play(amb.name, {
+						to_player = pname,
+						gain = ((amb.gain or 0.3) + (MORE_GAIN or 0)) * p.svol,
+						pitch = amb.pitch or 1.0, fade = amb.fade
+					}, amb.ephemeral)
 
 --print ("playing... " .. amb.name .. " (" .. chance .. " < "
 --		.. p.frequency .. ") @ ", MORE_GAIN, p.handler)
-			end
+				end
 
-			-- save what player is currently listening to if handler found
-			if p.handler then
-				p.set = set_name ; p.gain = MORE_GAIN ; p.timer = (amb.length or 5)
+				-- save what player is currently listening to if handler found
+				if p.handler then
+					p.set = set_name ; p.gain = MORE_GAIN ; p.timer = (amb.length or 5)
+				end
 			end
-		end
-	end
+		end -- END timer1sec
+	end -- END for loop
 end)
 
 -- sound volume command
