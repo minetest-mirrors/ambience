@@ -190,7 +190,7 @@ local function get_ambience(player, tod, pname)
 	end
 
 	-- get all set nodes around player
-	local ps, cn = core.find_nodes_in_area(
+	data.positions, data.totals = core.find_nodes_in_area(
 			{x = pos.x - radius, y = pos.y - radius, z = pos.z - radius},
 			{x = pos.x + radius, y = pos.y + radius, z = pos.z + radius}, set_nodes)
 
@@ -203,8 +203,6 @@ local function get_ambience(player, tod, pname)
 	data.tod = tod
 	data.head_node = get_node({x = pos.x, y = pos.y + p.eyeh, z = pos.z}).name
 	data.feet_node = get_node({x = pos.x, y = pos.y + 0.2, z = pos.z}).name
-	data.totals = cn
-	data.positions = ps
 	data.biome = bdata and core.get_biome_name(bdata.biome) or ""
 
 	-- loop through sets in order and choose first that has its conditions met
