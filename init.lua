@@ -7,6 +7,9 @@ local SOUNDVOLUME = 1.0
 local MUSICVOLUME = 0.6
 local MUSICINTERVAL = tonumber(core.settings:get("ambience_music_interval")) or (60 * 20)
 local radius = 6
+
+-- tables
+
 local playing = {} -- user settings, timers and current set playing
 local sound_sets = {} -- all the sounds and their settings
 local sound_set_order = {} -- needed because pairs loops randomly through tables
