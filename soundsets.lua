@@ -259,7 +259,7 @@ ambience.add_set("beach", {
 ambience.add_set("beach_night", {
 
 	background = {
-		{name = "beach", length = 13, fade = 0.2},
+		{name = "beach", length = 13, gain = 0.2, fade = 0.2},
 	},
 
 	frequency = 40,
